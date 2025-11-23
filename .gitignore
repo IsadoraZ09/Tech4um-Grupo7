@@ -137,3 +137,23 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# ========================
+# TECH4UM - Adicional
+# ========================
+
+# Ambiente
+.env
+.env.local
+.env.production
+
+# Banco de dados
+*.db
+data/
+
+#frontend
+dist/
+build/
+
+#Editores
+.vscode/
