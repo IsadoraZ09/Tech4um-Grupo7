@@ -35,12 +35,12 @@ body {
 }
 
 /* Header (agora dentro do dashboard, não full-width) */
+/* Header padrão */
 .header {
-  display: block; /* full width bar, inner content controls the width */
+  display: block;
   padding: 8px 0;
   margin-bottom: 20px;
 }
-
 .header .content-inner {
   max-width: 1066px;
   margin: 0 auto;
@@ -51,6 +51,53 @@ body {
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Header variante login */
+.header-login {
+  background: var(--fundo);
+  box-shadow: none;
+  margin-bottom: 32px;
+}
+.content-inner-login {
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  min-height: 90px;
+}
+.user-info-login {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.user-details-login {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 8px;
+}
+.user-name-login {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--azul-escuro);
+  margin-bottom: 2px;
+}
+.user-email-login {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.avatar-login {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--azul-escuro);
+  box-shadow: 0 2px 8px rgba(49, 137, 199, 0.1);
 }
 .brand {
   display: flex;
@@ -656,4 +703,151 @@ body {
   .grid-row-4-type2 {
     grid-column: auto;
   }
+}
+
+/* Modal (Login) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+  z-index: 1200;
+}
+.modal-content {
+  width: 420px;
+  background: #fff;
+  padding: 22px 22px 18px 22px;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  transform-origin: center;
+  animation: modalIn 160ms ease-out;
+}
+@keyframes modalIn {
+  from {
+    transform: translateY(-8px) scale(0.995);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+.modal-title {
+  font-size: 20px;
+  color: #0f6fb0;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.modal-sub {
+  font-size: 14px;
+  color: var(--texto);
+  margin: 0 0 14px;
+}
+.label {
+  display: block;
+  font-size: 13px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d6d9dd;
+  font-size: 14px;
+}
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(49, 137, 199, 0.08);
+  border-color: var(--azul-escuro);
+}
+.input-error {
+  border-color: #e06b6b;
+}
+.error-msg {
+  color: #b82e2e;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* modal actions layout */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* orange login button in main header only */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.btn-login-orange {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: var(--laranja);
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(184, 92, 45, 0.12);
+}
+.btn-login-orange:hover {
+  background: var(--laranja-escuro);
+}
+
+.clickable-avatar {
+  cursor: pointer;
+}
+
+/* Profile menu (small dropdown anchored to avatar) */
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 180px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1400;
+}
+.profile-menu-login {
+  right: 6px;
+}
+.profile-menu-user {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+.profile-menu-item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--azul-escuro);
+  font-weight: 700;
+}
+.profile-menu-item:hover {
+  background: rgba(49, 137, 199, 0.06);
 }
