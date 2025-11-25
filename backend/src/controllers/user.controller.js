@@ -8,7 +8,7 @@ const generateToken = (id) => {
   });
 };
 
-// --- CADASTRO ---
+
 const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -29,14 +29,14 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       username,
       email,
-      password, // O Model vai criptografar isso sozinho
+      password, 
     });
 
-    // 4. Retorna Sucesso + TOKEN
+    
     res.status(201).json({
       message: "Usuário registrado com sucesso.",
       user: { id: user._id, email: user.email, username: user.username },
-      token: generateToken(user._id), // <--- ONDE A MÁGICA ACONTECE
+      token: generateToken(user._id), 
     });
 
   } catch (error) {
