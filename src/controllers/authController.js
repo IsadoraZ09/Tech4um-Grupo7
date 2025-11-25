@@ -20,16 +20,18 @@ const createSendCookie = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES * 60 * 60 * 1000
     ),
     httpOnly: process.env.NODE_ENV === 'development' ? false : true,
-    secure: process.env.NODE_ENV === 'development' ? true : true,
+    secure: process.env.NODE_ENV === 'production' ? true : false,
     sameSite: 'Strict',
   };
 
   user.password = undefined;
+  user.role = undefined;
 
   res.cookie('jwt', token, cookieOptions);
 
   res.status(statusCode).json({
-    status: 'sucess',
+    status: 'success',
+    token, // Adicionar token na resposta para o frontend usar
     data: {
       user: user,
     },
@@ -37,9 +39,10 @@ const createSendCookie = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { email, password, passwordConfirm } = req.body;
+  const {username, email, password, passwordConfirm } = req.body;
 
   const newUser = await User.create({
+    username,
     email,
     password,
     passwordConfirm,
@@ -148,5 +151,19 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'Reset token enviado',
+  });
+});
+
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Logout realizado com sucesso',
   });
 });

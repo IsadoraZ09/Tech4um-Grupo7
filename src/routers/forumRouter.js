@@ -4,16 +4,16 @@ const forum = require("../controllers/forumController");
 
 const router = express.Router();
 
-// Protege todas as rotas abaixo com autenticação
+// Rotas públicas (sem autenticação)
+router.get("/", forum.getAllForums);
+router.get("/:id", forum.getForum);
+
+// Rotas protegidas (requerem autenticação)
 router.use(authController.protect);
 
-router.route("/")
-  .get(forum.getAllForums)
-  .post(forum.createForum);
-
-router.route("/:id")
-  .get(forum.getForum)
-  .patch(forum.updateForum)
-  .delete(forum.deleteForum);
+router.post("/", forum.createForum);
+router.patch("/:id", forum.updateForum);
+router.delete("/:id", forum.deleteForum);
+router.patch('/:id/join', forum.joinForum);
 
 module.exports = router;
