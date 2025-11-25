@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title">
+  <title>tech4um logo</title>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#1799F6"/>
+      <stop offset="1" stop-color="#1772B2"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="36" fill="url(#g)" />
+  <g transform="translate(32,110)">
+    <text x="0" y="0" font-family="Montserrat, Inter, Arial, sans-serif" font-weight="700" font-size="48" fill="#fff">tech</text>
+    <text x="110" y="0" font-family="Montserrat, Inter, Arial, sans-serif" font-weight="700" font-size="48" fill="#fff">4um</text>
+  </g>
+</svg>
