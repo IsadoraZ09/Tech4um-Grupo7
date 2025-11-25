@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const dummyRouter = require('./routers/dummyRouter');
+const forumRouter = require('./routers/forumRouter');
+const messageRouter = require('./routers/messageRouter');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -42,7 +44,10 @@ app.use((req, res, next) => {
 
 if (process.env.NODE_ENV === 'production') app.use('/api', limiter);
 
+// Rotas da API
 app.use('/api/v1/dummy', dummyRouter);
+app.use('/api/v1/forums', forumRouter);
+app.use('/api/v1/messages', messageRouter);
 
 //Routing react-route-dom
 app.all('/*', (req, res, next) => {
