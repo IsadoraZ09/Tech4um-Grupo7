@@ -14,6 +14,6 @@ router.use(authController.protect);
 router.post("/", forum.createForum);
 router.patch("/:id", forum.updateForum);
 router.delete("/:id", forum.deleteForum);
-router.patch('/:id/join', forum.joinForum);
+router.patch('/:id/join', forum.joinForum); 
 
 module.exports = router;
