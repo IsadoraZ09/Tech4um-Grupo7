@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "./components/Header_login.jsx";
+import Header from "./components/Header.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import CardGrid from "./components/CardGrid.jsx";
 import Dashboard_login from "./Dashboard_login.jsx";
