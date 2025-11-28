@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Header from "../components/Header.jsx";
-import SearchBar from "../components/HomeScreen/SearchBar.jsx";
-import CardGrid from "../components/HomeScreen/CardGrid.jsx";
-import ModalLogin from "../components/ModalLogin.jsx";
+import Header from "../components/Header/Header.jsx";
+import SearchBar from "../components/HomeScreen/SearchBar/SearchBar.jsx";
+import CardGrid from "../components/HomeScreen/CardGrid/CardGrid.jsx";
+import ModalLogin from "../components/Header/ModalLogin.jsx";
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');

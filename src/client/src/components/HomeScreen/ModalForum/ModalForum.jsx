@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { forumAPI } from "../../services/api";
-import "../../styles.css";
+import { forumAPI } from "../../../services/api";
+import "../../../styles/styles.css";
 
 export default function ModalCreateForum({ isOpen, onClose }) {
     const [formData, setFormData] = useState({

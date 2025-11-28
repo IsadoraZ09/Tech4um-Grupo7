@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import Header from "../components/Header.jsx";
-import ParticipantsSidebar from "../components/ForumScreen/ParticipantsSidebar.jsx";
-import ChatMain from "../components/ForumScreen/ChatMain";
-import RelatedRoomsSidebar from "../components/ForumScreen/RelatedRoomsSidebar";
-import ModalLogin from "../components/ModalLogin.jsx";
+import Header from "../components/Header/Header.jsx";
+import ParticipantsSidebar from "../components/ForumScreen/ParticipantsSideBar/ParticipantsSidebar.jsx";
+import ChatMain from "../components/ForumScreen/ChatMain/ChatMain.jsx";
+import RelatedRoomsSidebar from "../components/ForumScreen/RelatedRoomsSidebar/RelatedRoomsSidebar.jsx";
+import ModalLogin from "../components/Header/ModalLogin.jsx";
 import { forumAPI } from "../services/api";
-import "../styles.css";
+import "../styles/styles.css";
 
 export default function Sala_forum() {
   const { salaId } = useParams();

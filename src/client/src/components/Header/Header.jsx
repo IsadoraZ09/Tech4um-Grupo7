@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext.jsx";
-import { authAPI } from "../services/api.js";
-import logo from "../assets/Vector.png";
+import { useAuth } from "../../features/AuthContext.jsx";
+import { authAPI } from "../../services/api.js";
+import logo from "../../assets/Vector.png";
 
 export default function Header() {
   const { user, openLogin, logout } = useAuth();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../AuthContext.jsx";
-import { authAPI } from "../services/api";
+import { useAuth } from "../../features/AuthContext.jsx";
+import { authAPI } from "../../services/api";
 
 export default function ModalLogin() {
   const { isLoginOpen, closeLogin, login } = useAuth();

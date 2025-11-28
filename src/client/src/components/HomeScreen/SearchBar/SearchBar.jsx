@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../AuthContext.jsx";
-import ModalCreateForum from "./ModalForum.jsx";
+import { useAuth } from "../../../features/AuthContext.jsx";
+import ModalCreateForum from "../ModalForum/ModalForum.jsx";
 
 export default function SearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");

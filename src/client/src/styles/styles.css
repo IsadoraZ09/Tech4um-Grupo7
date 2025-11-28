@@ -1960,3 +1960,115 @@ body {
     width: 100%;
   }
 }
+
+/* Emoji Picker */
+.emoji-picker-container {
+  position: relative;
+}
+
+.emoji-picker-popup {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 10px;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Preview de anexos */
+.sala-forum-attachments-preview {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+  border-radius: 24px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.sala-forum-attachment-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 120px;
+}
+
+.sala-forum-attachment-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.sala-forum-attachment-remove:hover {
+  background: #e74c3c;
+  transform: scale(1.1);
+}
+
+.sala-forum-attachment-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #e0e0e0;
+}
+
+.sala-forum-attachment-name {
+  font-size: 0.75rem;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Scrollbar customizada para preview */
+.sala-forum-attachments-preview::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sala-forum-attachments-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.sala-forum-attachments-preview::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.sala-forum-attachments-preview::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .emoji-picker-popup {
+    left: auto;
+    right: 0;
+  }
+  
+  .sala-forum-attachment-item {
+    width: 100px;
+  }
+  
+  .sala-forum-attachment-preview {
+    width: 100px;
+    height: 100px;
+  }
+}
