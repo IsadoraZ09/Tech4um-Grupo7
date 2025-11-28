@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Header from "./components/Header.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import CardGrid from "./components/CardGrid.jsx";
-import Dashboard_login from "./Dashboard_login.jsx";
 import ModalLogin from "./components/ModalLogin.jsx";
 import { useAuth } from "./AuthContext.jsx";
+import Header_login from "./components/Header_login.jsx";
 
 export default function App() {
   const { user } = useAuth();
@@ -14,13 +14,11 @@ export default function App() {
     setSearchQuery(query);
   };
 
-  if (user) return <Dashboard_login />;
-
   return (
     <div className="layout">
-      <Header />
-      <SearchBar />
-      <CardGrid />
+      {user ? <Header_login /> : <Header />}
+      <SearchBar onSearch={handleSearch} />
+      <CardGrid searchQuery={searchQuery} />
       <ModalLogin />
     </div>
   );

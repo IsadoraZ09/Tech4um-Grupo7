@@ -49,7 +49,7 @@ export default function CardGrid({ searchQuery }) {
     return (
       <section className="card-layout" aria-label="Container da grade de cards">
         <div className="card-layout-inner">
-          <p>Nenhum fórum encontrado. Que tal criar o primeiro?</p>
+          <p>Nenhum fórum encontrado. {searchQuery ? 'Tente outra busca ou' : 'Que tal'} criar o primeiro?</p>
         </div>
       </section>
     );

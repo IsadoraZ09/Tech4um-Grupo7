@@ -1,44 +1,41 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function Card({ forum, type = 1 }) {
-  const navigate = useNavigate();
+export default function Card({ forum, type }) {
+  const cardClass = `card card-type${type}`;
   
-  let cardClass = 'card';
-  if (type === 1) cardClass += ' card-type1';
-  if (type === 2) cardClass += ' card-type2';
-  if (type === 3) cardClass += ' card-type3';
-
-  const handleCardClick = () => {
-    navigate(`/forum/${forum._id}`);
-  };
-
   return (
-    <article className={cardClass} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
-      {type === 1 && forum.featured && (
-        <span className="tag">Tópico em destaque!</span>
-      )}
+    <Link
+      to={`/sala/${forum._id}`}
+      className={cardClass}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      {type === 1 && <span className="tag">Tópico em destaque!</span>}
       
-      <h3 className="title">{forum.title}</h3>
+      <h3 className={type === 1 ? "title" : "title"}>
+        {forum.title}
+      </h3>
       
       <div className="people">
-        {forum.creator?.username || 'Anônimo'} • {forum.members?.length || 0} pessoas
+        {forum.creator?.username} • {forum.members?.length || 0} pessoas
       </div>
       
-      {type === 1 && forum.description && (
-        <p className="desc">{forum.description}</p>
+      {type === 1 && (
+        <p className="desc">
+          {forum.description || "O que temos de bom nessa sala, pessoal?"}
+        </p>
       )}
       
-      <p className="desc small">
-        <span className="creator-label">Criado por:</span>{' '}
-        <span className="creator-name">{forum.creator?.username || 'Anônimo'}</span>
-      </p>
+      <div className="creator bottom">
+        <span className="creator-label">Criado por:</span>
+        <span className="creator-name"> {forum.creator?.username || forum.criador}</span>
+      </div>
       
       {forum.unreadCount > 0 && (
         <div className="unread-badge" aria-hidden>
           {forum.unreadCount}
         </div>
       )}
-    </article>
+    </Link>
   );
 }

@@ -1,110 +1,39 @@
 import Header_login from "./components/Header_login";
-import "./Sala_forum.css";
+import "./styles.css";
 import { useParams, Link } from "react-router-dom";
 import ModalLogin from "./components/ModalLogin.jsx";
 import { useState, useRef, useEffect } from "react";
-
-// Dados de exemplo para múltiplas salas
-const salas = {
-  "product-development-stuff": {
-    titulo: "Product Development Stuff",
-    criador: "Lara Alves",
-    participantes: [
-      {
-        nome: "Lara Alves",
-        cor: "#F9C74F",
-        avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-      },
-      { nome: "Luiz Antonio Magalhães", cor: "#F94144" },
-      { nome: "Gustavo Marcondes", cor: "#F3722C" },
-      { nome: "Lucas Pinheiro", cor: "#277DA1" },
-      { nome: "Bruna Pires Lacerda", cor: "#90BE6D" },
-      { nome: "Gabriella Rodrigues Souza", cor: "#43AA8B" },
-      { nome: "Leandro Silva Maciel", cor: "#577590" },
-      { nome: "Sandra Reis", cor: "#F9844A" },
-      { nome: "Wellington Resende Pereira", cor: "#577590" },
-      { nome: "José Thiago Miranda", cor: "#43AA8B" },
-      { nome: "Amanda Oliveira", cor: "#F8961E" },
-      { nome: "Camilla Santana", cor: "#F3722C" },
-      { nome: "Alberto Teixeira", cor: "#90BE6D" },
-    ],
-    mensagens: [
-      {
-        autor: "Lara Alves",
-        avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-        texto:
-          "Olá, pessoal! Agora temos esse espaço para falar sobre produto e dev :) Fiquem à vontade para mandar o que acharem que faz sentido aqui.",
-      },
-      { autor: "Lucas Pinheiro", texto: "Eba!!! Cadê esse pessoal animado?" },
-      { autor: "Arthur Silva", texto: "👋👋👋👋👋👋👋👋👋👋" },
-      {
-        autor: "Gabrielle Rodrigues Souza",
-        texto:
-          "Chegou o meu momento de descarregar um monte de link aqui pra geral 😁",
-      },
-      {
-        autor: "Wellington Resende Pereira",
-        texto: "mensagem privada",
-        privado: true,
-      },
-      {
-        autor: "Wellington Resende Pereira",
-        texto: "Estou com vergonha de interagir aqui hahahaha",
-      },
-    ],
-  },
-  "referencias-boas": {
-    titulo: "Referências Boas",
-    criador: "Carlos M.",
-    participantes: [
-      { nome: "Carlos M.", cor: "#43AA8B" },
-      { nome: "Equipe Ops", cor: "#eb520e" },
-    ],
-    mensagens: [{ autor: "Carlos M.", texto: "Aqui só entra referência top!" }],
-  },
-};
-
-const sidebarRooms = [
-  {
-    titulo: "product-development-stuff",
-    criador: "Lara Alves",
-    pessoas: "Lara Alves • 48 pessoas",
-    badge: "+115",
-  },
-  {
-    titulo: "Designers_na_firma",
-    criador: "Lucas Gomes",
-    pessoas: "Lucas Gomes • 55 pessoas",
-  },
-  {
-    titulo: "Referências Boas",
-    criador: "Carlos M.",
-    pessoas: "Carlos M. • 2 pessoas",
-  },
-  {
-    titulo: "Assistência Tech",
-    criador: "Equipe Ops",
-    pessoas: "Equipe Ops • 12 pessoas",
-  },
-  {
-    titulo: "Manda um nome para esse 4um",
-    criador: "Nome do Criador",
-    pessoas: "Um nome • 70 pessoas",
-  },
-  {
-    titulo: "Manda uma nota para esse fórum",
-    criador: "Nome do Criador",
-    pessoas: "Um nome • 70 pessoas",
-  },
-];
+import { forumAPI } from "./services/api";
 
 export default function Sala_forum() {
   const { salaId } = useParams();
-  const sala = salas[salaId] || salas["product-development-stuff"];
+  const [sala, setSala] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // Modal login acessibilidade
   const [modalOpen, setModalOpen] = useState(false);
   const [participantQuery, setParticipantQuery] = useState("");
   const modalRef = useRef(null);
+
+  useEffect(() => {
+    fetchForumDetails();
+  }, [salaId]);
+
+  const fetchForumDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await forumAPI.getForum(salaId);
+      setSala(response.data.data.forum);
+      setError(null);
+    } catch (err) {
+      setError(err.response?.data?.message || "Erro ao carregar fórum");
+      console.error("Erro ao buscar fórum:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (modalOpen && modalRef.current) {
       modalRef.current.focus();
@@ -116,6 +45,31 @@ export default function Sala_forum() {
       document.body.style.overflow = "";
     };
   }, [modalOpen]);
+
+  if (loading) {
+    return (
+      <div className="sala-forum-bg">
+        <Header_login />
+        <div className="sala-forum-main">
+          <p>Carregando fórum...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !sala) {
+    return (
+      <div className="sala-forum-bg">
+        <Header_login />
+        <div className="sala-forum-main">
+          <p className="error-message">{error || "Fórum não encontrado"}</p>
+          <Link to="/" className="sala-forum-back">
+            <span className="arrow-left">&#8592;</span> Voltar para o dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // Responsivo: grid 3/2/1 colunas
   return (
@@ -159,31 +113,30 @@ export default function Sala_forum() {
             />
           </div>
           <ul className="sala-forum-participants">
-            {sala.participantes
-              .filter((p) =>
-                p.nome
+            {sala.participants
+              ?.filter((p) =>
+                p.username
                   .toLowerCase()
                   .includes(participantQuery.trim().toLowerCase())
               )
               .map((p) => (
-                <li key={p.nome} className="sala-forum-participant">
+                <li key={p._id} className="sala-forum-participant">
                   <span
                     className="sala-forum-avatar"
                     style={{
-                      background: p.avatar ? "none" : p.cor,
-                      color: p.cor,
+                      background: p.avatar ? "none" : p.color || "#e0e0e0",
+                      color: p.color || "#e0e0e0",
                     }}
-                    aria-label={
-                      p.avatar ? undefined : `Cor do participante ${p.nome}`
-                    }
                   >
-                    {p.avatar ? <img src={p.avatar} alt={p.nome} /> : null}
+                    {p.avatar ? <img src={p.avatar} alt={p.username} /> : null}
                   </span>
-                  <span className="sala-forum-participant-name">{p.nome}</span>
+                  <span className="sala-forum-participant-name">
+                    {p.username}
+                  </span>
                   <button
                     type="button"
                     className="sala-forum-private-action"
-                    aria-label={`Enviar mensagem privada para ${p.nome}`}
+                    aria-label={`Enviar mensagem privada para ${p.username}`}
                   >
                     <span
                       className="sala-forum-private-icon"
@@ -191,7 +144,7 @@ export default function Sala_forum() {
                     >
                       💬
                     </span>
-                    <span>Enviar mensagem para {p.nome.split(" ")[0]}</span>
+                    <span>Enviar mensagem para {p.username.split(" ")[0]}</span>
                   </button>
                 </li>
               ))}
@@ -201,53 +154,46 @@ export default function Sala_forum() {
         {/* Chat principal */}
         <main className="sala-forum-chat-main" aria-label="Mensagens da sala">
           <div className="sala-forum-chat-header">
-            <h2 className="sala-forum-chat-title">{sala.titulo}</h2>
+            <h2 className="sala-forum-chat-title">{sala.name}</h2>
             <span className="sala-forum-chat-criador">
-              Criado por: <b>{sala.criador}</b>
+              Criado por: <b>{sala.creator?.username}</b>
             </span>
           </div>
           <div className="sala-forum-chat-messages">
-            {sala.mensagens &&
-              sala.mensagens.map((m, i) => {
-                const participante = sala.participantes.find(
-                  (p) => p.nome === m.autor
-                );
-                const cor =
-                  participante && participante.cor
-                    ? participante.cor
-                    : "#e0e0e0";
-                return (
-                  <div
-                    key={i}
-                    className={`sala-forum-message${
-                      m.privado ? " sala-forum-message-private" : ""
-                    }`}
-                  >
-                    <div className="sala-forum-message-body">
-                      <span className="sala-forum-message-author">
-                        {m.autor}
-                      </span>
-                      <span className="sala-forum-message-text">
-                        {m.privado ? (
-                          <b className="sala-forum-private-label">{m.texto}</b>
-                        ) : (
-                          m.texto
-                        )}
-                      </span>
-                    </div>
-                    <span
-                      className="sala-forum-avatar sala-forum-avatar-msg"
-                      style={{
-                        background: m.avatar ? "none" : cor,
-                        "--avatar-color": cor,
-                        border: `2px solid #fff`,
-                      }}
-                    >
-                      {m.avatar ? <img src={m.avatar} alt={m.autor} /> : null}
-                    </span>
-                  </div>
-                );
-              })}
+            {sala.messages?.map((m, i) => (
+              <div
+                key={m._id || i}
+                className={`sala-forum-message${
+                  m.isPrivate ? " sala-forum-message-private" : ""
+                }`}
+              >
+                <div className="sala-forum-message-body">
+                  <span className="sala-forum-message-author">
+                    {m.sender?.username}
+                  </span>
+                  <span className="sala-forum-message-text">
+                    {m.isPrivate ? (
+                      <b className="sala-forum-private-label">{m.content}</b>
+                    ) : (
+                      m.content
+                    )}
+                  </span>
+                </div>
+                <span
+                  className="sala-forum-avatar sala-forum-avatar-msg"
+                  style={{
+                    background: m.sender?.avatar
+                      ? "none"
+                      : m.sender?.color || "#e0e0e0",
+                    border: `2px solid #fff`,
+                  }}
+                >
+                  {m.sender?.avatar ? (
+                    <img src={m.sender.avatar} alt={m.sender.username} />
+                  ) : null}
+                </span>
+              </div>
+            ))}
           </div>
           <div className="sala-forum-chat-typing">
             Amanda Oliveira está digitando...
@@ -299,14 +245,12 @@ export default function Sala_forum() {
           className="sala-forum-sidebar sala-forum-sidebar-right"
           aria-label="Tópicos"
         >
-          {sidebarRooms.map((s) => (
-            <div key={s.titulo} className="sala-forum-side-room">
+          {sala.relatedRooms?.map((s) => (
+            <div key={s._id} className="sala-forum-side-room">
               <div className="sala-forum-side-room-title">
-                {s.titulo.length > 18
-                  ? s.titulo.slice(0, 15) + "..."
-                  : s.titulo}
+                {s.name.length > 18 ? s.name.slice(0, 15) + "..." : s.name}
               </div>
-              <div className="sala-forum-side-room-pessoas">{s.pessoas}</div>
+              <div className="sala-forum-side-room-pessoas">{s.participants}</div>
             </div>
           ))}
         </aside>

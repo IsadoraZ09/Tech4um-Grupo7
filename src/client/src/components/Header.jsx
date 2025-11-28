@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import logo from "../assets/logo_tech4um.png";
+import logo from "../assets/Vector.png";
 import { useAuth } from "../AuthContext.jsx";
 
 export default function Header() {
@@ -34,12 +34,11 @@ export default function Header() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {!user ? (
             <button
-              className="btn-login-orange"
+              className="btn-login-header"
               onClick={openLogin}
               aria-label="Entrar"
-              title="Entrar"
             >
-              <span className="sr-only">Entrar</span>
+              Entrar
             </button>
           ) : (
             <div
