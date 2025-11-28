@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import { forumAPI } from "../services/api";
+import { forumAPI } from "../../services/api";
 
 export default function CardGrid({ searchQuery }) {
   const [forums, setForums] = useState([]);

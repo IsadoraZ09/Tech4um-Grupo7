@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
-import Sala_forum from "./Sala_forum.jsx";
+import App from "./screens/App.jsx";
+import Sala_forum from "./screens/Forum.jsx";
 import { AuthProvider } from "./AuthContext.jsx";
 import "./styles.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
