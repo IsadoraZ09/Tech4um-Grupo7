@@ -55,93 +55,148 @@ export default function CardGrid({ searchQuery }) {
     );
   }
 
-  // Dividir fóruns entre as duas colunas
-  const leftColumnForums = [];
-  const rightColumnForums = [];
+  // Ordenar fóruns por quantidade de membros (decrescente)
+  const sortedForums = [...forums].sort((a, b) => {
+    const membersA = a.membersCount || a.members?.length || 0;
+    const membersB = b.membersCount || b.members?.length || 0;
+    return membersB - membersA;
+  });
 
-  forums.forEach((forum, index) => {
-    if (index % 2 === 0) {
-      leftColumnForums.push(forum);
+  // Distribuir fóruns entre as colunas de forma equilibrada
+  const leftForums = [];
+  const rightForums = [];
+
+  let leftSlots = 0; // Contador de "slots" na esquerda (Type1=1, Type2=1, Type3=0.5)
+  let rightSlots = 0;
+
+  sortedForums.forEach((forum, index) => {
+    // Determinar qual coluna tem menos slots preenchidos
+    if (leftSlots <= rightSlots) {
+      leftForums.push(forum);
+      // Calcular slots baseado no padrão da esquerda
+      const posInPattern = leftForums.length % 4;
+      if (posInPattern === 1) leftSlots += 1; // Type1
+      else if (posInPattern === 2) leftSlots += 1; // Type2
+      else leftSlots += 0.5; // Type3
     } else {
-      rightColumnForums.push(forum);
+      rightForums.push(forum);
+      // Calcular slots baseado no padrão da direita
+      const posInPattern = rightForums.length % 4;
+      if (posInPattern === 1) rightSlots += 1; // Type2
+      else if (posInPattern === 0) rightSlots += 1; // Type1
+      else rightSlots += 0.5; // Type3
     }
   });
 
-  // Padrão original: Type1 → Type2 → 2xType3 (row) → Type2
-  const renderLeftColumn = () => {
-    return leftColumnForums.map((forum, index) => {
-      // Primeiro card: Type1
-      if (index === 0) {
-        return <Card key={forum._id} forum={forum} type={1} />;
-      }
-      // Segundo card: Type2
-      if (index === 1) {
-        return <Card key={forum._id} forum={forum} type={2} />;
-      }
-      // Terceiro e quarto cards: 2xType3 em row-small
-      if (index === 2 && leftColumnForums[3]) {
-        return (
-          <div key={`row-${index}`} className="row-small">
-            <Card forum={forum} type={3} />
-            <Card forum={leftColumnForums[3]} type={3} />
-          </div>
-        );
-      }
-      // Pular o quarto card (já renderizado no row-small)
-      if (index === 3) {
-        return null;
-      }
-      // Demais cards: Type2
-      if (index > 3) {
-        return <Card key={forum._id} forum={forum} type={2} />;
-      }
-      return null;
-    });
+  // Função para verificar se tem Type3 ímpar na última posição e redistribuir
+  const redistributeOrphanType3 = () => {
+    // Verificar coluna esquerda
+    const leftLastPattern = leftForums.length % 4;
+    if (leftLastPattern === 3 && leftForums.length > 0) {
+      // Tem um Type3 sozinho no final da esquerda
+      const orphan = leftForums.pop();
+      rightForums.push(orphan);
+    }
+
+    // Verificar coluna direita
+    const rightLastPattern = rightForums.length % 4;
+    if (rightLastPattern === 2 && rightForums.length > 0) {
+      // Tem um Type3 sozinho no final da direita
+      const orphan = rightForums.pop();
+      leftForums.push(orphan);
+    }
   };
 
-  // Padrão original: Type2 → 2xType3 (row) → Type1 → 2xType3 (row)
+  redistributeOrphanType3();
+
+  // Renderizar coluna esquerda: Type1 → Type2 → 2xType3 (repetindo)
+  const renderLeftColumn = () => {
+    const elements = [];
+    let i = 0;
+
+    while (i < leftForums.length) {
+      const positionInPattern = i % 4;
+
+      if (positionInPattern === 0) {
+        // Type1
+        elements.push(
+          <Card key={leftForums[i]._id} forum={leftForums[i]} type={1} />
+        );
+        i++;
+      } else if (positionInPattern === 1) {
+        // Type2
+        elements.push(
+          <Card key={leftForums[i]._id} forum={leftForums[i]} type={2} />
+        );
+        i++;
+      } else if (positionInPattern === 2) {
+        // 2xType3
+        if (i + 1 < leftForums.length) {
+          elements.push(
+            <div key={`row-left-${i}`} className="row-small">
+              <Card forum={leftForums[i]} type={3} />
+              <Card forum={leftForums[i + 1]} type={3} />
+            </div>
+          );
+          i += 2;
+        } else {
+          // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
+          elements.push(
+            <div key={`row-left-${i}`} className="row-small">
+              <Card forum={leftForums[i]} type={3} />
+            </div>
+          );
+          i++;
+        }
+      }
+    }
+
+    return elements;
+  };
+
+  // Renderizar coluna direita: Type2 → 2xType3 → Type1 (repetindo)
   const renderRightColumn = () => {
-    return rightColumnForums.map((forum, index) => {
-      // Primeiro card: Type2
-      if (index === 0) {
-        return <Card key={forum._id} forum={forum} type={2} />;
-      }
-      // Segundo e terceiro cards: 2xType3 em row-small
-      if (index === 1 && rightColumnForums[2]) {
-        return (
-          <div key={`row-${index}`} className="row-small">
-            <Card forum={forum} type={3} />
-            <Card forum={rightColumnForums[2]} type={3} />
-          </div>
+    const elements = [];
+    let i = 0;
+
+    while (i < rightForums.length) {
+      const positionInPattern = i % 4;
+
+      if (positionInPattern === 0) {
+        // Type2
+        elements.push(
+          <Card key={rightForums[i]._id} forum={rightForums[i]} type={2} />
         );
-      }
-      // Pular o terceiro card
-      if (index === 2) {
-        return null;
-      }
-      // Quarto card: Type1
-      if (index === 3) {
-        return <Card key={forum._id} forum={forum} type={1} />;
-      }
-      // Quinto e sexto cards: 2xType3 em row-small
-      if (index === 4 && rightColumnForums[5]) {
-        return (
-          <div key={`row-${index}`} className="row-small">
-            <Card forum={forum} type={3} />
-            <Card forum={rightColumnForums[5]} type={3} />
-          </div>
+        i++;
+      } else if (positionInPattern === 1) {
+        // 2xType3
+        if (i + 1 < rightForums.length) {
+          elements.push(
+            <div key={`row-right-${i}`} className="row-small">
+              <Card forum={rightForums[i]} type={3} />
+              <Card forum={rightForums[i + 1]} type={3} />
+            </div>
+          );
+          i += 2;
+        } else {
+          // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
+          elements.push(
+            <div key={`row-right-${i}`} className="row-small">
+              <Card forum={rightForums[i]} type={3} />
+            </div>
+          );
+          i++;
+        }
+      } else if (positionInPattern === 3) {
+        // Type1
+        elements.push(
+          <Card key={rightForums[i]._id} forum={rightForums[i]} type={1} />
         );
+        i++;
       }
-      // Pular o sexto card
-      if (index === 5) {
-        return null;
-      }
-      // Demais cards: alternar entre Type1 e Type2
-      if (index > 5) {
-        return <Card key={forum._id} forum={forum} type={index % 2 === 0 ? 1 : 2} />;
-      }
-      return null;
-    });
+    }
+
+    return elements;
   };
 
   return (
