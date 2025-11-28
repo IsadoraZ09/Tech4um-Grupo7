@@ -39,12 +39,11 @@ exports.getForum = catchAsync(async (req, res, next) => {
 });
 
 exports.createForum = catchAsync(async (req, res, next) => {
-  const { title, description, featured } = req.body;
+  const { title, description } = req.body;
 
   const newForum = await Forum.create({
     title,
     description,
-    featured: featured || false,
     creator: req.user._id, // Pega do middleware protect
   });
 

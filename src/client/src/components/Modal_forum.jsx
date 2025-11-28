@@ -7,7 +7,6 @@ export default function ModalCreateForum({ isOpen, onClose }) {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        featured: false,
     });
     const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState("");
@@ -73,7 +72,7 @@ export default function ModalCreateForum({ isOpen, onClose }) {
 
     const handleClose = () => {
         if (!isSubmitting) {
-            setFormData({ title: "", description: "", featured: false });
+            setFormData({ title: "", description: "" });
             setErrors({});
             setServerError("");
             onClose();

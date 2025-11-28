@@ -10,10 +10,6 @@ const ForumSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  featured: { 
-    type: Boolean, 
-    default: false 
-  },
   creator: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext.jsx";
 import ModalCreateForum from "./Modal_forum.jsx";
 
 export default function SearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { user, openLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -18,6 +20,16 @@ export default function SearchBar({ onSearch }) {
     setSearchTerm("");
     if (onSearch) {
       onSearch("");
+    }
+  };
+
+  const handleCreateForum = () => {
+    if (!user) {
+      // Se não estiver logado, abre o modal de login
+      openLogin();
+    } else {
+      // Se estiver logado, abre o modal de criar fórum
+      setIsCreateModalOpen(true);
     }
   };
 
@@ -37,13 +49,33 @@ export default function SearchBar({ onSearch }) {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button
-                type="button"
-                className="btn-outline search-input-btn"
-                aria-label="botão de limpar"
-                onClick={handleClear}
-              >
-              </button>
+              
+              {searchTerm && (
+                <button
+                  type="button"
+                  className="btn-clear-input"
+                  aria-label="limpar busca"
+                  onClick={handleClear}
+                  title="Limpar busca"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18 6L6 18M6 6l12 12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              )}
+
               <button
                 type="submit"
                 className="btn-outline search-input-btn"
@@ -76,7 +108,7 @@ export default function SearchBar({ onSearch }) {
               type="button"
               className="btn-primary create-btn" 
               aria-label="criar 4um"
-              onClick={() => setIsCreateModalOpen(true)}
+              onClick={handleCreateForum}
             >
               Ou crie seu próprio 4um
             </button>
@@ -84,10 +116,12 @@ export default function SearchBar({ onSearch }) {
         </div>
       </section>
 
-      <ModalCreateForum 
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-      />
+      {user && (
+        <ModalCreateForum 
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+        />
+      )}
     </>
   );
 }
