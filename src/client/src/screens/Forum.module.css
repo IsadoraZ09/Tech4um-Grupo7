@@ -1,0 +1,382 @@
+/* ========================================
+   FORUM SCREEN CONTAINER
+   ======================================== */
+   .forumScreen {
+    min-height: 100vh;
+    background: var(--fundo);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* ========================================
+     SALA FORUM LAYOUT
+     ======================================== */
+  .salaForum {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: flex-start;
+  }
+  
+  /* ========================================
+     LAYOUT DE TRÊS COLUNAS
+     ======================================== */
+  .salaForumLeft {
+    flex-shrink: 0;
+    width: 360px;
+    min-height: 600px;
+  }
+  
+  .salaForumCenter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 940px;
+    min-height: 600px;
+  }
+  
+  .salaForumRight {
+    flex-shrink: 0;
+    width: 360px;
+    min-height: 600px;
+  }
+  
+  /* ========================================
+     ESTADOS DE LOADING
+     ======================================== */
+  .salaForumLoading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 4rem 2rem;
+    color: var(--muted);
+    font-size: 1.125rem;
+    min-height: 60vh;
+  }
+  
+  .salaForumLoading .spinner {
+    margin-right: 1rem;
+    border-color: var(--azul-escuro);
+    border-top-color: transparent;
+  }
+  
+  /* ========================================
+     ESTADOS DE ERROR
+     ======================================== */
+  .salaForumError {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #e74c3c;
+    min-height: 60vh;
+  }
+  
+  .salaForumError h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #e74c3c;
+  }
+  
+  .salaForumError p {
+    margin: 0 0 2rem 0;
+    color: var(--muted);
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+  
+  .salaForumError button {
+    padding: 0.875rem 2rem;
+    background: var(--azul-escuro);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1rem;
+  }
+  
+  .salaForumError button:hover {
+    background: #0f4f75;
+  }
+  
+  /* ========================================
+     LINK DE VOLTAR NO ERROR STATE
+     ======================================== */
+  .salaForumBackLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--azul-escuro);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: color 0.2s;
+    font-size: 1rem;
+  }
+  
+  .salaForumBackLink:hover {
+    color: var(--azul-claro);
+  }
+  
+  .arrowLeft {
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .salaForumBackLink:hover .arrowLeft {
+    transform: translateX(-2px);
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 1200px) {
+    .salaForum {
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      align-items: stretch;
+    }
+  
+    .salaForumLeft,
+    .salaForumRight {
+      width: 100%;
+      order: 2;
+      min-height: auto;
+    }
+  
+    .salaForumCenter {
+      order: 1;
+      max-width: none;
+      min-height: 500px;
+    }
+  
+    /* Reorganizar ordem no mobile */
+    .salaForumLeft {
+      order: 1;
+    }
+  
+    .salaForumCenter {
+      order: 2;
+    }
+  
+    .salaForumRight {
+      order: 3;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .salaForum {
+      padding: 12px;
+      gap: 12px;
+    }
+  
+    .salaForumLoading {
+      padding: 3rem 1.5rem;
+      font-size: 1rem;
+      min-height: 50vh;
+    }
+  
+    .salaForumError {
+      padding: 3rem 1.5rem;
+      min-height: 50vh;
+    }
+  
+    .salaForumError h2 {
+      font-size: 1.25rem;
+    }
+  
+    .salaForumError p {
+      font-size: 1rem;
+    }
+  
+    .salaForumBackLink {
+      font-size: 0.9375rem;
+    }
+  
+    .salaForumCenter {
+      min-height: 400px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .salaForum {
+      padding: 8px;
+      gap: 8px;
+    }
+  
+    .salaForumLoading {
+      padding: 2rem 1rem;
+      min-height: 40vh;
+    }
+  
+    .salaForumError {
+      padding: 2rem 1rem;
+      min-height: 40vh;
+    }
+  
+    .salaForumError button {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9375rem;
+    }
+  
+    .salaForumBackLink {
+      font-size: 0.875rem;
+    }
+  
+    .salaForumCenter {
+      min-height: 350px;
+    }
+  }
+  
+  /* ========================================
+     ACESSIBILIDADE
+     ======================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .salaForumError button,
+    .salaForumBackLink,
+    .arrowLeft {
+      transition: none;
+    }
+  
+    .salaForum {
+      animation: none;
+    }
+  }
+  
+  /* Focus management */
+  .forumScreen:focus-within {
+    outline: none;
+  }
+  
+  .salaForumError button:focus,
+  .salaForumBackLink:focus {
+    outline: 2px solid var(--azul-escuro);
+    outline-offset: 2px;
+  }
+  
+  /* ========================================
+     ANIMAÇÕES DE ENTRADA
+     ======================================== */
+  @keyframes forumFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .salaForum {
+    animation: forumFadeIn 0.4s ease;
+  }
+  
+  @keyframes errorSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .salaForumError {
+    animation: errorSlideIn 0.3s ease;
+  }
+  
+  @keyframes loadingPulse {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  .salaForumLoading {
+    animation: loadingPulse 2s infinite;
+  }
+  
+  /* ========================================
+     VARIAÇÕES DE LAYOUT (para futuro uso)
+     ======================================== */
+  .salaForumCompact {
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .salaForumWide .salaForumLeft,
+  .salaForumWide .salaForumRight {
+    width: 280px;
+  }
+  
+  .salaForumWide .salaForumCenter {
+    max-width: 1200px;
+  }
+  
+  /* ========================================
+     ESTADOS ESPECIAIS
+     ======================================== */
+  .salaForum[data-loading="true"] {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  
+  .salaForum[data-offline="true"] {
+    background: #fff5f5;
+  }
+  
+  .salaForum[data-offline="true"]::before {
+    content: "⚠️ Conectividade perdida";
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  }
+  
+  /* ========================================
+     SCROLL BEHAVIOR
+     ======================================== */
+  .forumScreen {
+    scroll-behavior: smooth;
+  }
+  
+  /* ========================================
+     THEME SUPPORT (para futuro tema escuro)
+     ======================================== */
+  @media (prefers-color-scheme: dark) {
+    .forumScreen {
+      background: #1a1a1a;
+    }
+    
+    .salaForumError {
+      color: #ff6b6b;
+    }
+    
+    .salaForumError p {
+      color: #ccc;
+    }
+  }

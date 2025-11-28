@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/AuthContext.jsx";
 import { authAPI } from "../../services/api.js";
 import logo from "../../assets/Vector.png";
+import styles from "./Header.module.css";
+import "../../styles/global.css";
 
 export default function Header() {
   const { user, openLogin, logout } = useAuth();
@@ -48,17 +50,17 @@ export default function Header() {
   };
 
   return (
-    <header className="header">
-      <div className="content-inner">
-        <Link to="/" className="brand" style={{ textDecoration: 'none' }}>
-          <img src={logo} alt="tech4um logo" className="brand-logo" />
-          <span className="brand-sub">Seu fórum sobre tecnologia!</span>
+    <header className={styles.header}>
+      <div className={styles.contentInner}>
+        <Link to="/" className={styles.brand} style={{ textDecoration: 'none' }}>
+          <img src={logo} alt="tech4um logo" className={styles.brandLogo} />
+          <span className={styles.brandSub}>Seu fórum sobre tecnologia!</span>
         </Link>
 
         <div ref={menuRef} style={{ position: "relative" }}>
           {!user ? (
             <button
-              className="btn-login-header"
+              className={styles.btnLoginHeader}
               onClick={openLogin}
               aria-label="Entrar"
             >
@@ -67,17 +69,17 @@ export default function Header() {
           ) : (
             <>
               <button
-                className="user-avatar-btn"
+                className={styles.userAvatarBtn}
                 onClick={() => setMenuOpen((s) => !s)}
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
               >
-                <div className="user-avatar">
+                <div className={styles.userAvatar}>
                   {getInitials(user.username)}
                 </div>
-                <span className="user-name">{user.username}</span>
+                <span className={styles.userName}>{user.username}</span>
                 <svg
-                  className={`dropdown-arrow ${menuOpen ? 'open' : ''}`}
+                  className={`${styles.dropdownArrow} ${menuOpen ? styles.open : ''}`}
                   width="12"
                   height="12"
                   viewBox="0 0 12 12"
@@ -96,27 +98,27 @@ export default function Header() {
 
               {menuOpen && (
                 <div
-                  className="user-dropdown"
+                  className={styles.userDropdown}
                   role="menu"
                   aria-label="Menu do perfil"
                 >
-                  <div className="dropdown-header">
-                    <div className="user-avatar large">
+                  <div className={styles.dropdownHeader}>
+                    <div className={`${styles.userAvatar} ${styles.large}`}>
                       {getInitials(user.username)}
                     </div>
-                    <div className="user-info">
-                      <h3 className="user-dropdown-name">{user.username}</h3>
-                      <p className="user-dropdown-email">{user.email}</p>
+                    <div className={styles.userInfo}>
+                      <h3 className={styles.userDropdownName}>{user.username}</h3>
+                      <p className={styles.userDropdownEmail}>{user.email}</p>
                     </div>
                   </div>
                   
-                  <div className="dropdown-divider" />
+                  <div className={styles.dropdownDivider} />
                   
-                  <ul className="dropdown-menu">
+                  <ul className={styles.dropdownMenu}>
                     <li>
                       <Link
                         to="/profile"
-                        className="dropdown-item"
+                        className={styles.dropdownItem}
                         role="menuitem"
                         onClick={() => setMenuOpen(false)}
                       >
@@ -130,7 +132,7 @@ export default function Header() {
                     <li>
                       <Link
                         to="/my-forums"
-                        className="dropdown-item"
+                        className={styles.dropdownItem}
                         role="menuitem"
                         onClick={() => setMenuOpen(false)}
                       >
@@ -143,7 +145,7 @@ export default function Header() {
                     <li>
                       <Link
                         to="/settings"
-                        className="dropdown-item"
+                        className={styles.dropdownItem}
                         role="menuitem"
                         onClick={() => setMenuOpen(false)}
                       >
@@ -155,11 +157,11 @@ export default function Header() {
                       </Link>
                     </li>
                     
-                    <div className="dropdown-divider" />
+                    <div className={styles.dropdownDivider} />
                     
                     <li>
                       <button
-                        className="dropdown-item logout"
+                        className={`${styles.dropdownItem} ${styles.logout}`}
                         role="menuitem"
                         onClick={handleLogout}
                       >

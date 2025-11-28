@@ -1,15 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../features/AuthContext.jsx";
 import Header from "../components/Header/Header.jsx";
 import ParticipantsSidebar from "../components/ForumScreen/ParticipantsSideBar/ParticipantsSidebar.jsx";
 import ChatMain from "../components/ForumScreen/ChatMain/ChatMain.jsx";
 import RelatedRoomsSidebar from "../components/ForumScreen/RelatedRoomsSidebar/RelatedRoomsSidebar.jsx";
 import ModalLogin from "../components/Header/ModalLogin.jsx";
 import { forumAPI } from "../services/api";
-import "../styles/styles.css";
+import styles from "./Forum.module.css";
+import "../styles/global.css";
 
-export default function Sala_forum() {
+export default function Forum() {
   const { salaId } = useParams();
+  const { user } = useAuth();
   const [sala, setSala] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -48,8 +51,8 @@ export default function Sala_forum() {
 
   const handleSendMessage = async (messageContent) => {
     try {
-      // TODO: Implementar envio de mensagem via API
-      console.log("Enviando mensagem:", messageContent);
+      await forumAPI.sendMessage(salaId, messageContent);
+      fetchForumDetails();
     } catch (err) {
       console.error("Erro ao enviar mensagem:", err);
     }
@@ -57,10 +60,11 @@ export default function Sala_forum() {
 
   if (loading) {
     return (
-      <div className="sala-forum-bg">
+      <div className={styles.forumScreen}>
         <Header />
-        <div className="sala-forum-main">
-          <p>Carregando fórum...</p>
+        <div className={styles.salaForumLoading}>
+          <div className="spinner"></div>
+          Carregando fórum...
         </div>
       </div>
     );
@@ -68,12 +72,14 @@ export default function Sala_forum() {
 
   if (error || !sala) {
     return (
-      <div className="sala-forum-bg">
+      <div className={styles.forumScreen}>
         <Header />
-        <div className="sala-forum-main">
-          <p className="error-message">{error || "Fórum não encontrado"}</p>
-          <Link to="/" className="sala-forum-back">
-            <span className="arrow-left">&#8592;</span> Voltar para o dashboard
+        <div className={styles.salaForumError}>
+          <h2>Ops! Algo deu errado</h2>
+          <p>{error || "Fórum não encontrado"}</p>
+          <Link to="/" className={styles.salaForumBackLink}>
+            <span className={styles.arrowLeft}>&#8592;</span> 
+            Voltar para o dashboard
           </Link>
         </div>
       </div>
@@ -81,13 +87,26 @@ export default function Sala_forum() {
   }
 
   return (
-    <div className="sala-forum-bg">
+    <div className={styles.forumScreen}>
       <Header />
-      <div className="sala-forum-main">
-        <ParticipantsSidebar participants={sala.participants} />
-        <ChatMain sala={sala} onSendMessage={handleSendMessage} />
-        <RelatedRoomsSidebar relatedRooms={sala.relatedRooms} />
-      </div>
+      <main className={styles.salaForum}>
+        <aside className={styles.salaForumLeft}>
+          <ParticipantsSidebar participants={sala.participants || []} />
+        </aside>
+        
+        <section className={styles.salaForumCenter}>
+          <ChatMain 
+            sala={sala} 
+            onSendMessage={handleSendMessage}
+            loading={loading}
+            error={error}
+          />
+        </section>
+        
+        <aside className={styles.salaForumRight}>
+          <RelatedRoomsSidebar relatedRooms={sala.relatedRooms || []} />
+        </aside>
+      </main>
 
       {modalOpen && (
         <div

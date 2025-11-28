@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { forumAPI } from "../../../services/api";
-import "../../../styles/styles.css";
+import styles from "./ModalForum.module.css";
+import "../../../styles/global.css"; // Importar global para classes compartilhadas
 
 export default function ModalCreateForum({ isOpen, onClose }) {
     const [formData, setFormData] = useState({
@@ -82,12 +83,12 @@ export default function ModalCreateForum({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content-create" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header-create">
-                    <h2 className="modal-title-create">Criar Novo 4um</h2>
+        <div className={styles.modalOverlay} onClick={handleClose}>
+            <div className={styles.modalContentCreate} onClick={(e) => e.stopPropagation()}>
+                <div className={styles.modalHeaderCreate}>
+                    <h2 className={styles.modalTitleCreate}>Criar Novo 4um</h2>
                     <button
-                        className="modal-close-btn"
+                        className={styles.modalCloseBtn}
                         onClick={handleClose}
                         disabled={isSubmitting}
                         aria-label="Fechar"
@@ -110,7 +111,7 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="modal-form-create">
+                <form onSubmit={handleSubmit} className={styles.modalFormCreate}>
                     {serverError && (
                         <div className="server-error">
                             <svg
@@ -127,9 +128,9 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                         </div>
                     )}
 
-                    <div className="form-group-create">
-                        <label htmlFor="title" className="label-create">
-                            Título do Fórum <span className="required">*</span>
+                    <div className={styles.formGroupCreate}>
+                        <label htmlFor="title" className={styles.labelCreate}>
+                            Título do Fórum <span className={styles.required}>*</span>
                         </label>
                         <input
                             type="text"
@@ -137,19 +138,19 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            className={`input-create ${errors.title ? "input-error" : ""}`}
+                            className={`${styles.inputCreate} ${errors.title ? "input-error" : ""}`}
                             placeholder="Ex: Discussões sobre IA"
                             disabled={isSubmitting}
                             maxLength={100}
                         />
-                        <div className="char-count">
+                        <div className={styles.charCount}>
                             {formData.title.length}/100
                         </div>
                         {errors.title && <p className="error-msg">{errors.title}</p>}
                     </div>
 
-                    <div className="form-group-create">
-                        <label htmlFor="description" className="label-create">
+                    <div className={styles.formGroupCreate}>
+                        <label htmlFor="description" className={styles.labelCreate}>
                             Descrição (opcional)
                         </label>
                         <textarea
@@ -157,14 +158,13 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            className={`textarea-create ${errors.description ? "input-error" : ""
-                                }`}
+                            className={`${styles.textareaCreate} ${errors.description ? "input-error" : ""}`}
                             placeholder="Descreva sobre o que será discutido neste fórum..."
                             rows={4}
                             disabled={isSubmitting}
                             maxLength={500}
                         />
-                        <div className="char-count">
+                        <div className={styles.charCount}>
                             {formData.description.length}/500
                         </div>
                         {errors.description && (
@@ -172,10 +172,10 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                         )}
                     </div>
 
-                    <div className="modal-actions-create">
+                    <div className={styles.modalActionsCreate}>
                         <button
                             type="button"
-                            className="btn-cancel-create"
+                            className={styles.btnCancelCreate}
                             onClick={handleClose}
                             disabled={isSubmitting}
                         >
@@ -183,7 +183,7 @@ export default function ModalCreateForum({ isOpen, onClose }) {
                         </button>
                         <button
                             type="submit"
-                            className="btn-submit-create"
+                            className={styles.btnSubmitCreate}
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? (

@@ -1,0 +1,255 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+/* ========================================
+   VARIÁVEIS CSS
+   ======================================== */
+:root {
+  --fundo: #F3F3F3;
+  --card: #F3F3F3;
+  --texto: #6f747e;
+  --muted: #b2b5b9;
+  --azul-claro: #6baddd;
+  --azul-escuro: #3189c7;
+  --laranja: #eb520e;
+  --laranja-escuro: #b8400b;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --radius: 20px;
+}
+
+/* ========================================
+   RESET E ESTILOS BASE
+   ======================================== */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Montserrat, Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    Arial, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+/* ========================================
+   UTILITÁRIOS
+   ======================================== */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.content-inner {
+  max-width: 1066px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 12px;
+}
+
+/* ========================================
+   BOTÕES COMPARTILHADOS
+   ======================================== */
+.btn-outline {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: var(--azul-escuro);
+  color: #F3F3F3;
+  border-radius: 10px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background: #135a8f;
+}
+
+.btn-primary {
+  padding: 14px 20px;
+  border: none;
+  background: var(--azul-escuro);
+  color: #F3F3F3;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background: #0f4f75;
+}
+
+/* ========================================
+   INPUTS COMPARTILHADOS
+   ======================================== */
+.label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #5A7BFF;
+}
+
+.input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.input-error {
+  border-color: #e74c3c !important;
+}
+
+/* ========================================
+   MENSAGENS DE ERRO
+   ======================================== */
+.error-msg {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.error-message {
+  /* Para mensagens de erro em containers */
+  color: #e74c3c;
+}
+
+.server-error {
+  background: #fee;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   AVATARES
+   ======================================== */
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--laranja-escuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #F3F3F3;
+}
+
+.clickable-avatar {
+  cursor: pointer;
+}
+
+/* ========================================
+   ANIMAÇÕES GLOBAIS
+   ======================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   SPINNER
+   ======================================== */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ========================================
+   SCROLLBAR CUSTOMIZADA
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ========================================
+   RESPONSIVIDADE GERAL
+   ======================================== */
+@media (max-width: 768px) {
+  .content-inner {
+    padding: 0 1rem;
+  }
+}

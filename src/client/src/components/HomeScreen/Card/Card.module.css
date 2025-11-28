@@ -1,0 +1,305 @@
+/* ========================================
+   CARD BASE
+   ======================================== */
+   .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 32px;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  
+  .card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  /* ========================================
+     CARD TYPE 1 (Destaque - Laranja)
+     ======================================== */
+  .cardType1 {
+    grid-row: span 2;
+    border-radius: 32px;
+    width: 521px;
+    height: 309px;
+    padding: 32px;
+    grid-column: 1 / -1;
+    justify-self: center;
+    position: relative;
+  }
+  
+  .cardType1 .tag {
+    position: absolute;
+    left: 16px;
+    top: 12px;
+    display: inline-block;
+    background: #F3F3F3;
+    color: #ff6600;
+    margin-top: 8px;
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 17px;
+    z-index: 3;
+    font-style: italic;
+  }
+  
+  .cardType1 .title {
+    color: #3189c7;
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    padding-bottom: 16px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .cardType1 .people {
+    color: #9aa0a6;
+    font-size: 13px;
+    padding-top: 0px;
+    margin-top: 0px;
+  }
+  
+  .cardType1 .desc {
+    color: #6b7280;
+    margin-top: 32px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 12px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+  }
+  
+  .cardType1 .desc.small {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    color: #6b7280;
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  
+  .cardType1 .creator {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #374151;
+    font-size: 12px;
+    text-align: left;
+    display: block;
+  }
+  
+  .cardType1 .creator.bottom {
+    position: absolute;
+    justify-content: left;
+    left: 16px;
+    bottom: 14px;
+    right: auto;
+    color: #6b7280;
+    font-size: 12px;
+  }
+  
+  /* ========================================
+     CARD TYPE 2 (Intermediário - Azul)
+     ======================================== */
+  .cardType2 {
+    grid-row: span 1;
+    border-radius: 32px;
+    width: 521px;
+    height: 170px;
+    padding: 28px;
+    position: relative;
+  }
+  
+  .cardType2 .title {
+    color: #3189c7;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding-top: 0px;
+    padding-bottom: 16px;
+    text-align: left;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .cardType2 .creator {
+    color: #6b7280;
+    font-size: 14px;
+    text-align: left;
+    display: block;
+  }
+  
+  .cardType2 .creator.bottom {
+    padding-bottom: 12px;
+    padding-left: 12px;
+    position: absolute;
+    left: 16px;
+    bottom: 12px;
+    right: auto;
+    color: #6b7280;
+    font-size: 12px;
+  }
+  
+  .cardType2 .people {
+    background: transparent;
+    color: #9aa0a6;
+    font-size: 13px;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* ========================================
+     CARD TYPE 3 (Pequeno - Azul)
+     ======================================== */
+  .cardType3 {
+    grid-row: span 1;
+    border-radius: 32px;
+    width: 251px;
+    height: 170px;
+    padding: 32px;
+    position: relative;
+  }
+  
+  .cardType3 .title {
+    color: #3189c7;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding-bottom: 12px;
+    text-align: left;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .cardType3 .creator {
+    color: #6b7280;
+    font-size: 12px;
+    text-align: left;
+    display: block;
+  }
+  
+  .cardType3 .creator.bottom {
+    padding-bottom: 12px;
+    padding-left: 18px;
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    right: auto;
+    color: #6b7280;
+    font-size: 12px;
+  }
+  
+  .cardType3 .creator .creatorLabel,
+  .cardType3 .creator .creatorName {
+    display: block;
+    width: auto;
+  }
+  
+  .cardType3 .creator .creatorLabel {
+    margin-bottom: 2px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+  
+  .cardType3 .creator .creatorName {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 700;
+  }
+  
+  .cardType3 .people {
+    background: transparent;
+    color: #9aa0a6;
+    font-size: 13px;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* ========================================
+     ELEMENTOS COMPARTILHADOS
+     ======================================== */
+  .creator {
+    text-align: left;
+    display: block;
+  }
+  
+  .creator .creatorLabel,
+  .creator .creatorName {
+    display: inline;
+  }
+  
+  .creator .creatorName {
+    font-weight: 700;
+  }
+  
+  .creatorName {
+    font-weight: 700;
+  }
+  
+  /* ========================================
+     UNREAD BADGE
+     ======================================== */
+  .unreadBadge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 42px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--azul-escuro);
+    color: #F3F3F3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    padding: 0 8px;
+    margin-bottom: 12px;
+    margin-right: 12px;
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 900px) {
+    .cardType1,
+    .cardType2,
+    .cardType3 {
+      width: 100%;
+    }
+  
+    .cardType1 {
+      height: auto;
+    }
+  
+    .cardType2,
+    .cardType3 {
+      height: auto;
+    }
+  }

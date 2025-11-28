@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../features/AuthContext.jsx";
 import ModalCreateForum from "../ModalForum/ModalForum.jsx";
+import styles from "./SearchBar.module.css";
+import "../../../styles/global.css"; // Importar global para classes compartilhadas
 
 export default function SearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,15 +37,15 @@ export default function SearchBar({ onSearch }) {
 
   return (
     <>
-      <section className="hero">
+      <section className={styles.hero}>
         <div className="content-inner">
           <h1>Opa!</h1>
-          <p className="subtitle">Sobre o que gostaria de falar hoje?</p>
+          <p className={styles.subtitle}>Sobre o que gostaria de falar hoje?</p>
 
-          <form className="searchbar" onSubmit={handleSearch}>
-            <div className="search-input-wrap">
+          <form className={styles.searchbar} onSubmit={handleSearch}>
+            <div className={styles.searchInputWrap}>
               <input
-                className="search-input"
+                className={styles.searchInput}
                 type="text"
                 placeholder="Em busca de uma sala? Encontre-a aqui"
                 value={searchTerm}
@@ -53,7 +55,7 @@ export default function SearchBar({ onSearch }) {
               {searchTerm && (
                 <button
                   type="button"
-                  className="btn-clear-input"
+                  className={styles.btnClearInput}
                   aria-label="limpar busca"
                   onClick={handleClear}
                   title="Limpar busca"
@@ -78,7 +80,7 @@ export default function SearchBar({ onSearch }) {
 
               <button
                 type="submit"
-                className="btn-outline search-input-btn"
+                className={styles.searchInputBtn}
                 aria-label="botão de buscar"
               >
                 <svg
@@ -106,13 +108,26 @@ export default function SearchBar({ onSearch }) {
             </div>
             <button 
               type="button"
-              className="btn-primary create-btn" 
+              className={styles.createBtn} 
               aria-label="criar 4um"
               onClick={handleCreateForum}
             >
               Ou crie seu próprio 4um
             </button>
           </form>
+
+          {/* Opcionalmente, mostrar resultados de busca se necessário */}
+          {searchTerm && (
+            <div className={styles.searchResults}>
+              Buscando por: <span className={styles.searchResultsQuery}>"{searchTerm}"</span>
+              <button 
+                className={styles.searchResultsClear}
+                onClick={handleClear}
+              >
+                Limpar busca
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

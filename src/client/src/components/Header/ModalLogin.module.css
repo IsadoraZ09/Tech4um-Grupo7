@@ -1,0 +1,163 @@
+/* ========================================
+   MODAL OVERLAY
+   ======================================== */
+   .modalOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(5px);
+    z-index: 1200;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  /* ========================================
+     MODAL CONTENT
+     ======================================== */
+  .modalContent {
+    width: 420px;
+    background: #F3F3F3;
+    padding: 22px 22px 18px 22px;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    transform-origin: center;
+    animation: modalIn 160ms ease-out, slideUp 0.3s ease;
+    max-width: 450px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  /* ========================================
+     MODAL HEADER
+     ======================================== */
+  .modalTitle {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .modalSub {
+    color: #666;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.9375rem;
+  }
+  
+  /* ========================================
+     MODAL ACTIONS
+     ======================================== */
+  .modalActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+  
+  .btnPrimaryLogin {
+    width: 100%;
+    padding: 0.875rem;
+    background: #5A7BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .btnPrimaryLogin:hover:not(:disabled) {
+    background: #4a6bd5;
+  }
+  
+  .btnPrimaryLogin:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     MODAL TOGGLE (Alternar entre Login/Signup)
+     ======================================== */
+  .modalToggle {
+    margin-top: 1.5rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .modalToggle p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9375rem;
+  }
+  
+  .toggleBtn {
+    background: none;
+    border: none;
+    color: #5A7BFF;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9375rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+  
+  .toggleBtn:hover {
+    color: #4a6bd5;
+  }
+  
+  .toggleBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     ANIMAÇÕES DO MODAL
+     ======================================== */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes modalIn {
+    from {
+      transform: translateY(-8px) scale(0.995);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 768px) {
+    .modalContent {
+      padding: 1.5rem;
+      max-width: 95%;
+    }
+  
+    .modalTitle {
+      font-size: 1.5rem;
+    }
+  }

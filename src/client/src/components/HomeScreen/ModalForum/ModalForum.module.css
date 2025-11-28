@@ -1,0 +1,310 @@
+/* ========================================
+   MODAL OVERLAY (compartilhado)
+   ======================================== */
+   .modalOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(5px);
+    z-index: 1200;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  /* ========================================
+     MODAL CONTENT CREATE
+     ======================================== */
+  .modalContentCreate {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUpModal 0.3s ease;
+  }
+  
+  /* ========================================
+     MODAL HEADER
+     ======================================== */
+  .modalHeaderCreate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .modalTitleCreate {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+  
+  .modalCloseBtn {
+    background: transparent;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+  }
+  
+  .modalCloseBtn:hover {
+    background: #f5f5f5;
+    color: #333;
+  }
+  
+  .modalCloseBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     MODAL FORM
+     ======================================== */
+  .modalFormCreate {
+    padding: 2rem;
+  }
+  
+  .formGroupCreate {
+    margin-bottom: 1.5rem;
+  }
+  
+  .labelCreate {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+  }
+  
+  .required {
+    color: #e74c3c;
+  }
+  
+  .inputCreate,
+  .textareaCreate {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  
+  .inputCreate:focus,
+  .textareaCreate:focus {
+    outline: none;
+    border-color: #5A7BFF;
+    box-shadow: 0 0 0 3px rgba(90, 123, 255, 0.1);
+  }
+  
+  .inputCreate:disabled,
+  .textareaCreate:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .textareaCreate {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .charCount {
+    text-align: right;
+    font-size: 0.8125rem;
+    color: #999;
+    margin-top: 0.25rem;
+  }
+  
+  /* ========================================
+     CHECKBOX CUSTOMIZADO
+     ======================================== */
+  .checkboxGroup {
+    margin-top: 1.5rem;
+  }
+  
+  .checkboxLabel {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    user-select: none;
+    gap: 0.75rem;
+  }
+  
+  .checkboxInput {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .checkboxCustom {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  .checkboxInput:checked + .checkboxCustom {
+    background: #5A7BFF;
+    border-color: #5A7BFF;
+  }
+  
+  .checkboxInput:checked + .checkboxCustom::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .checkboxInput:focus + .checkboxCustom {
+    box-shadow: 0 0 0 3px rgba(90, 123, 255, 0.1);
+  }
+  
+  .checkboxText {
+    flex: 1;
+    color: #333;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  
+  .checkboxHint {
+    display: block;
+    color: #666;
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* ========================================
+     MODAL ACTIONS
+     ======================================== */
+  .modalActionsCreate {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .btnCancelCreate,
+  .btnSubmitCreate {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .btnCancelCreate {
+    background: #f5f5f5;
+    color: #666;
+  }
+  
+  .btnCancelCreate:hover:not(:disabled) {
+    background: #e0e0e0;
+    color: #333;
+  }
+  
+  .btnSubmitCreate {
+    background: #5A7BFF;
+    color: white;
+  }
+  
+  .btnSubmitCreate:hover:not(:disabled) {
+    background: #4a6bd5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(90, 123, 255, 0.3);
+  }
+  
+  .btnCancelCreate:disabled,
+  .btnSubmitCreate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* ========================================
+     ANIMAÇÕES
+     ======================================== */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUpModal {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 768px) {
+    .modalContentCreate {
+      max-width: 95%;
+      border-radius: 16px;
+    }
+  
+    .modalHeaderCreate {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+  
+    .modalTitleCreate {
+      font-size: 1.5rem;
+    }
+  
+    .modalFormCreate {
+      padding: 1.5rem;
+    }
+  
+    .modalActionsCreate {
+      flex-direction: column-reverse;
+    }
+  
+    .btnCancelCreate,
+    .btnSubmitCreate {
+      width: 100%;
+    }
+  }

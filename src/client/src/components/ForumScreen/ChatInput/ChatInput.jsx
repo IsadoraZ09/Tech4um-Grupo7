@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import EmojiPicker from "emoji-picker-react";
+import styles from "./ChatInput.module.css";
+import "../../../styles/global.css"; // Importar global para classes compartilhadas
 
 export default function ChatInput({ onSendMessage }) {
   const [message, setMessage] = useState("");
@@ -72,16 +74,16 @@ export default function ChatInput({ onSendMessage }) {
   }, []);
 
   return (
-    <form className="sala-forum-chat-form" onSubmit={handleSubmit}>
-      <div className="sala-forum-chat-form-bar">
-        <span className="sala-forum-chat-form-label">
+    <form className={styles.salaForumChatForm} onSubmit={handleSubmit}>
+      <div className={styles.salaForumChatFormBar}>
+        <span className={styles.salaForumChatFormLabel}>
           Enviando para todos do 4um
         </span>
-        <div className="sala-forum-chat-bar-actions">
-          <div className="emoji-picker-container" ref={emojiPickerRef}>
+        <div className={styles.salaForumChatBarActions}>
+          <div className={styles.emojiPickerContainer} ref={emojiPickerRef}>
             <button
               type="button"
-              className="sala-forum-chat-bar-btn"
+              className={styles.salaForumChatBarBtn}
               aria-label="Inserir emoji"
               title="Inserir emoji"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -132,7 +134,7 @@ export default function ChatInput({ onSendMessage }) {
               </svg>
             </button>
             {showEmojiPicker && (
-              <div className="emoji-picker-popup">
+              <div className={styles.emojiPickerPopup}>
                 <EmojiPicker
                   onEmojiClick={onEmojiClick}
                   width={320}
@@ -154,7 +156,7 @@ export default function ChatInput({ onSendMessage }) {
           />
           <button
             type="button"
-            className="sala-forum-chat-bar-btn"
+            className={styles.salaForumChatBarBtn}
             aria-label="Enviar imagem ou vídeo"
             title="Enviar imagem ou vídeo"
             onClick={() => fileInputRef.current?.click()}
@@ -189,12 +191,12 @@ export default function ChatInput({ onSendMessage }) {
 
       {/* Preview dos arquivos anexados */}
       {attachedFiles.length > 0 && (
-        <div className="sala-forum-attachments-preview">
+        <div className={styles.salaForumAttachmentsPreview}>
           {attachedFiles.map((file, index) => (
-            <div key={index} className="sala-forum-attachment-item">
+            <div key={index} className={styles.salaForumAttachmentItem}>
               <button
                 type="button"
-                className="sala-forum-attachment-remove"
+                className={styles.salaForumAttachmentRemove}
                 onClick={() => removeFile(index)}
                 aria-label="Remover arquivo"
               >
@@ -218,24 +220,24 @@ export default function ChatInput({ onSendMessage }) {
                 <img
                   src={file.preview}
                   alt={file.name}
-                  className="sala-forum-attachment-preview"
+                  className={styles.salaForumAttachmentPreview}
                 />
               ) : (
                 <video
                   src={file.preview}
-                  className="sala-forum-attachment-preview"
+                  className={styles.salaForumAttachmentPreview}
                   controls
                 />
               )}
-              <span className="sala-forum-attachment-name">{file.name}</span>
+              <span className={styles.salaForumAttachmentName}>{file.name}</span>
             </div>
           ))}
         </div>
       )}
 
-      <div className="sala-forum-chat-form-inputs">
+      <div className={styles.salaForumChatFormInputs}>
         <input
-          className="sala-forum-chat-input"
+          className={styles.salaForumChatInput}
           placeholder="Escreva aqui uma mensagem maneira para mandar para os colegas..."
           aria-label="Mensagem"
           value={message}
@@ -243,7 +245,7 @@ export default function ChatInput({ onSendMessage }) {
         />
         <button
           type="submit"
-          className="sala-forum-chat-send-btn"
+          className={styles.salaForumChatSendBtn}
           title="Enviar"
           disabled={!message.trim() && attachedFiles.length === 0}
         >
@@ -253,7 +255,7 @@ export default function ChatInput({ onSendMessage }) {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="sala-forum-send-icon"
+            className={styles.salaForumSendIcon}
           >
             <path
               d="M22 2L11 13"

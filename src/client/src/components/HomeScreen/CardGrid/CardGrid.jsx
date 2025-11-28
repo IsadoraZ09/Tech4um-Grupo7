@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card/Card.jsx";
 import { forumAPI } from "../../../services/api";
+import styles from "./CardGrid.module.css";
 
 export default function CardGrid({ searchQuery }) {
   const [forums, setForums] = useState([]);
@@ -27,9 +28,9 @@ export default function CardGrid({ searchQuery }) {
 
   if (loading) {
     return (
-      <section className="card-layout" aria-label="Container da grade de cards">
-        <div className="card-layout-inner">
-          <p>Carregando fóruns...</p>
+      <section className={styles.cardLayout} aria-label="Container da grade de cards">
+        <div className={styles.cardLayoutInner}>
+          <p className={styles.loadingMessage}>Carregando fóruns...</p>
         </div>
       </section>
     );
@@ -37,9 +38,9 @@ export default function CardGrid({ searchQuery }) {
 
   if (error) {
     return (
-      <section className="card-layout" aria-label="Container da grade de cards">
-        <div className="card-layout-inner">
-          <p className="error-message">{error}</p>
+      <section className={styles.cardLayout} aria-label="Container da grade de cards">
+        <div className={styles.cardLayoutInner}>
+          <p className={styles.errorMessage}>{error}</p>
         </div>
       </section>
     );
@@ -47,9 +48,11 @@ export default function CardGrid({ searchQuery }) {
 
   if (forums.length === 0) {
     return (
-      <section className="card-layout" aria-label="Container da grade de cards">
-        <div className="card-layout-inner">
-          <p>Nenhum fórum encontrado. {searchQuery ? 'Tente outra busca ou' : 'Que tal'} criar o primeiro?</p>
+      <section className={styles.cardLayout} aria-label="Container da grade de cards">
+        <div className={styles.cardLayoutInner}>
+          <p className={styles.emptyMessage}>
+            Nenhum fórum encontrado. {searchQuery ? 'Tente outra busca ou' : 'Que tal'} criar o primeiro?
+          </p>
         </div>
       </section>
     );
@@ -133,7 +136,7 @@ export default function CardGrid({ searchQuery }) {
         // 2xType3
         if (i + 1 < leftForums.length) {
           elements.push(
-            <div key={`row-left-${i}`} className="row-small">
+            <div key={`row-left-${i}`} className={styles.rowSmall}>
               <Card forum={leftForums[i]} type={3} />
               <Card forum={leftForums[i + 1]} type={3} />
             </div>
@@ -142,7 +145,7 @@ export default function CardGrid({ searchQuery }) {
         } else {
           // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
           elements.push(
-            <div key={`row-left-${i}`} className="row-small">
+            <div key={`row-left-${i}`} className={styles.rowSmall}>
               <Card forum={leftForums[i]} type={3} />
             </div>
           );
@@ -172,7 +175,7 @@ export default function CardGrid({ searchQuery }) {
         // 2xType3
         if (i + 1 < rightForums.length) {
           elements.push(
-            <div key={`row-right-${i}`} className="row-small">
+            <div key={`row-right-${i}`} className={styles.rowSmall}>
               <Card forum={rightForums[i]} type={3} />
               <Card forum={rightForums[i + 1]} type={3} />
             </div>
@@ -181,7 +184,7 @@ export default function CardGrid({ searchQuery }) {
         } else {
           // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
           elements.push(
-            <div key={`row-right-${i}`} className="row-small">
+            <div key={`row-right-${i}`} className={styles.rowSmall}>
               <Card forum={rightForums[i]} type={3} />
             </div>
           );
@@ -200,15 +203,15 @@ export default function CardGrid({ searchQuery }) {
   };
 
   return (
-    <section className="card-layout" aria-label="Container da grade de cards">
-      <div className="card-layout-inner">
+    <section className={styles.cardLayout} aria-label="Container da grade de cards">
+      <div className={styles.cardLayoutInner}>
         {/* Left column */}
-        <div className="column left-column">
+        <div className={`${styles.column} ${styles.leftColumn}`}>
           {renderLeftColumn()}
         </div>
 
         {/* Right column */}
-        <div className="column right-column">
+        <div className={`${styles.column} ${styles.rightColumn}`}>
           {renderRightColumn()}
         </div>
       </div>

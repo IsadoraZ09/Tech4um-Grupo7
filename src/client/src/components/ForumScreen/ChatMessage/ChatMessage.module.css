@@ -1,0 +1,331 @@
+/* ========================================
+   SALA FORUM MESSAGE
+   ======================================== */
+   .salaForumMessage {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    background: #F3F3F3;
+    padding: 18px 20px;
+    border-radius: 18px;
+    transition: background 0.2s ease;
+  }
+  
+  .salaForumMessage:hover {
+    background: #f8f9fa;
+  }
+  
+  /* ========================================
+     PRIVATE MESSAGE VARIANT
+     ======================================== */
+  .salaForumMessagePrivate {
+    background: #fff5f5;
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .salaForumMessagePrivate:hover {
+    background: #fef2f2;
+  }
+  
+  /* ========================================
+     MESSAGE BODY
+     ======================================== */
+  .salaForumMessageBody {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0; /* Permite quebra de texto */
+  }
+  
+  /* ========================================
+     MESSAGE AUTHOR
+     ======================================== */
+  .salaForumMessageAuthor {
+    font-weight: 600;
+    color: #0a5fbf;
+    display: block;
+    line-height: 1.2;
+    font-size: 0.9375rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* ========================================
+     MESSAGE TEXT
+     ======================================== */
+  .salaForumMessageText {
+    color: #2c2c2c;
+    font-size: 1rem;
+    line-height: 1.5;
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* ========================================
+     PRIVATE MESSAGE STYLES
+     ======================================== */
+  .salaForumPrivateLabel {
+    color: #d84315;
+    font-weight: 600;
+    font-style: italic;
+  }
+  
+  .salaForumMessagePrivate .salaForumMessageAuthor {
+    color: #d84315;
+  }
+  
+  .salaForumMessagePrivate .salaForumMessageText {
+    color: #d84315;
+  }
+  
+  /* ========================================
+     AVATAR MESSAGE
+     ======================================== */
+  .salaForumAvatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: white;
+  }
+  
+  .salaForumAvatarMsg {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--avatar-color, #f6f6f6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+  
+  .salaForumAvatarMsg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  /* ========================================
+     MESSAGE TIMESTAMP (se necessário)
+     ======================================== */
+  .salaForumMessageTime {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 2px;
+    font-style: italic;
+  }
+  
+  /* ========================================
+     MESSAGE ATTACHMENTS (se necessário)
+     ======================================== */
+  .salaForumMessageAttachments {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .salaForumMessageAttachment {
+    max-width: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .salaForumMessageAttachment img,
+  .salaForumMessageAttachment video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* ========================================
+     MESSAGE REACTIONS (se necessário)
+     ======================================== */
+  .salaForumMessageReactions {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .salaForumMessageReaction {
+    background: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .salaForumMessageReaction:hover {
+    background: #e8f4fd;
+    border-color: #0a5fbf;
+  }
+  
+  .salaForumMessageReaction.active {
+    background: #0a5fbf;
+    color: white;
+    border-color: #0a5fbf;
+  }
+  
+  /* ========================================
+     MESSAGE STATES
+     ======================================== */
+  .salaForumMessage.editing {
+    background: #fff9e6;
+    border-left: 4px solid #ffc107;
+  }
+  
+  .salaForumMessage.deleted {
+    opacity: 0.6;
+  }
+  
+  .salaForumMessage.deleted .salaForumMessageText {
+    font-style: italic;
+    color: #999;
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 768px) {
+    .salaForumMessage {
+      padding: 14px 16px;
+      gap: 12px;
+    }
+  
+    .salaForumMessageBody {
+      gap: 2px;
+    }
+  
+    .salaForumMessageAuthor {
+      font-size: 0.875rem;
+    }
+  
+    .salaForumMessageText {
+      font-size: 0.9375rem;
+    }
+  
+    .salaForumAvatarMsg {
+      width: 30px;
+      height: 30px;
+      font-size: 0.75rem;
+    }
+  
+    .salaForumMessageAttachment {
+      max-width: 150px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .salaForumMessage {
+      padding: 12px;
+      gap: 10px;
+      border-radius: 12px;
+    }
+  
+    .salaForumMessageText {
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+  
+    .salaForumAvatarMsg {
+      width: 28px;
+      height: 28px;
+      font-size: 0.7rem;
+    }
+  
+    .salaForumMessageAttachment {
+      max-width: 120px;
+    }
+  
+    .salaForumMessageReactions {
+      margin-top: 4px;
+    }
+  
+    .salaForumMessageReaction {
+      padding: 1px 4px;
+      font-size: 0.7rem;
+    }
+  }
+  
+  /* ========================================
+     ACESSIBILIDADE
+     ======================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .salaForumMessage,
+    .salaForumMessageReaction {
+      transition: none;
+    }
+  }
+  
+  /* Focus states para acessibilidade */
+  .salaForumMessage:focus-within {
+    outline: 2px solid var(--azul-escuro);
+    outline-offset: 2px;
+  }
+  
+  /* ========================================
+     ANIMAÇÕES DE ENTRADA
+     ======================================== */
+  @keyframes messageSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .salaForumMessage {
+    animation: messageSlideIn 0.3s ease;
+  }
+  
+  /* ========================================
+     VARIANTES DE CORES DE AVATAR
+     ======================================== */
+  .salaForumAvatarMsg[data-color="blue"] {
+    background: linear-gradient(135deg, #3189c7, #6baddd);
+  }
+  
+  .salaForumAvatarMsg[data-color="green"] {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+  }
+  
+  .salaForumAvatarMsg[data-color="purple"] {
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+  }
+  
+  .salaForumAvatarMsg[data-color="red"] {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+  }
+  
+  .salaForumAvatarMsg[data-color="yellow"] {
+    background: linear-gradient(135deg, #eab308, #facc15);
+  }
+  
+  .salaForumAvatarMsg[data-color="orange"] {
+    background: linear-gradient(135deg, #eb520e, #f97316);
+  }

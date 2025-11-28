@@ -1,0 +1,322 @@
+/* ========================================
+   CHAT MAIN CONTAINER
+   ======================================== */
+   .salaForumChatMain {
+    flex: 1;
+    background: #F3F3F3;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 940px;
+    margin: 0;
+  }
+  
+  /* ========================================
+     CHAT HEADER
+     ======================================== */
+  .salaForumChatHeader {
+    min-width: 0;
+    padding: 36px 32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .salaForumChatTitle {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0a5fbf;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+  
+  .salaForumChatCriador {
+    font-weight: 500;
+    color: #0a5fbf;
+    font-size: 0.875rem;
+    margin-left: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .salaForumChatCriador b {
+    font-weight: 700;
+  }
+  
+  /* ========================================
+     CHAT MESSAGES CONTAINER
+     ======================================== */
+  .salaForumChatMessages {
+    flex: 1;
+    border-radius: 0px;
+    background: #F3F3F3;
+    padding: 0px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  
+  /* ========================================
+     EMPTY STATE
+     ======================================== */
+  .salaForumEmptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+  }
+  
+  .salaForumEmptyState p {
+    font-size: 1.125rem;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  .salaForumEmptyState::before {
+    content: "💬";
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  
+  /* ========================================
+     CHAT TYPING INDICATOR
+     ======================================== */
+  .salaForumChatTyping {
+    padding: 0 36px 8px;
+    font-size: 0.9rem;
+    color: #677d9a;
+    font-style: italic;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .salaForumChatTyping:not(:empty) {
+    padding-bottom: 12px;
+  }
+  
+  /* ========================================
+     SCROLL BEHAVIOR
+     ======================================== */
+  .salaForumChatMessages {
+    scroll-behavior: smooth;
+  }
+  
+  /* Elemento invisível para scroll automático */
+  .salaForumChatMessages::after {
+    content: "";
+    height: 1px;
+  }
+  
+  /* ========================================
+     LOADING STATE
+     ======================================== */
+  .salaForumLoadingState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 1.125rem;
+  }
+  
+  .salaForumLoadingState .spinner {
+    margin-right: 0.75rem;
+    border-color: var(--azul-escuro);
+    border-top-color: transparent;
+  }
+  
+  /* ========================================
+     ERROR STATE
+     ======================================== */
+  .salaForumErrorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem;
+    text-align: center;
+    color: #e74c3c;
+  }
+  
+  .salaForumErrorState p {
+    font-size: 1.125rem;
+    margin: 0.5rem 0;
+  }
+  
+  .salaForumErrorState button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  
+  .salaForumErrorState button:hover {
+    background: #c0392b;
+  }
+  
+  /* ========================================
+     SCROLLBAR CUSTOMIZADA
+     ======================================== */
+  .salaForumChatMessages::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .salaForumChatMessages::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .salaForumChatMessages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  
+  .salaForumChatMessages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 768px) {
+    .salaForumChatMain {
+      border-radius: 16px;
+      max-width: 100%;
+    }
+  
+    .salaForumChatHeader {
+      padding: 24px 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      white-space: normal;
+    }
+  
+    .salaForumChatTitle {
+      font-size: 1.25rem;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    }
+  
+    .salaForumChatCriador {
+      margin-left: 0;
+      font-size: 0.8125rem;
+    }
+  
+    .salaForumEmptyState {
+      padding: 1.5rem;
+    }
+  
+    .salaForumEmptyState p {
+      font-size: 1rem;
+    }
+  
+    .salaForumChatTyping {
+      padding: 0 20px 8px;
+      font-size: 0.8125rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .salaForumChatHeader {
+      padding: 20px 16px;
+    }
+  
+    .salaForumChatTitle {
+      font-size: 1.125rem;
+    }
+  
+    .salaForumChatCriador {
+      font-size: 0.75rem;
+    }
+  
+    .salaForumEmptyState {
+      padding: 1rem;
+    }
+  
+    .salaForumEmptyState::before {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+  
+    .salaForumEmptyState p {
+      font-size: 0.9375rem;
+    }
+  
+    .salaForumChatTyping {
+      padding: 0 16px 6px;
+    }
+  }
+  
+  /* ========================================
+     ANIMAÇÕES
+     ======================================== */
+  @keyframes fadeInMessages {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .salaForumChatMessages {
+    animation: fadeInMessages 0.3s ease;
+  }
+  
+  /* ========================================
+     ACESSIBILIDADE
+     ======================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .salaForumChatMessages {
+      scroll-behavior: auto;
+      animation: none;
+    }
+  }
+  
+  /* Focus states para acessibilidade */
+  .salaForumChatMain:focus-within {
+    outline: 2px solid var(--azul-escuro);
+    outline-offset: -2px;
+  }
+  
+  /* ========================================
+     ESTADOS ESPECIAIS
+     ======================================== */
+  .salaForumChatMain[aria-busy="true"] {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+  .salaForumChatMain[data-disconnected="true"] {
+    border: 2px solid #e74c3c;
+    background: #fee;
+  }
+  
+  .salaForumChatMain[data-disconnected="true"] .salaForumChatHeader {
+    background: rgba(231, 76, 60, 0.1);
+  }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../features/AuthContext.jsx";
 import { authAPI } from "../../services/api";
+import styles from "./ModalLogin.module.css"; // Importação do CSS Modules
+import "../../styles/global.css";
 
 export default function ModalLogin() {
   const { isLoginOpen, closeLogin, login } = useAuth();
@@ -144,7 +146,7 @@ export default function ModalLogin() {
 
   return (
     <div
-      className="modal-overlay"
+      className={styles.modalOverlay}
       role="dialog"
       aria-label={isSignup ? "Cadastro" : "Login"}
       onMouseDown={(e) => {
@@ -152,14 +154,14 @@ export default function ModalLogin() {
       }}
     >
       <div
-        className="modal-content"
+        className={styles.modalContent}
         role="document"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <h3 className="modal-title">
+        <h3 className={styles.modalTitle}>
           {isSignup ? "Crie sua conta!" : "Que bom ter você aqui!"}
         </h3>
-        <p className="modal-sub">
+        <p className={styles.modalSub}>
           {isSignup 
             ? "Preencha os dados abaixo para criar sua conta."
             : "Para participar de um 4um é necessário fazer login."}

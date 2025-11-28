@@ -1,0 +1,190 @@
+/* ========================================
+   CARD LAYOUT CONTAINER
+   ======================================== */
+   .cardLayout {
+    max-width: 1066px;
+    margin: 20px auto 40px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    background: var(--card);
+    border-radius: 12px;
+    align-items: flex-start;
+  }
+  
+  .cardLayoutInner {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* ========================================
+     COLUMNS
+     ======================================== */
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 521px;
+  }
+  
+  /* ========================================
+     ROW SMALL (2xType3)
+     ======================================== */
+  .rowSmall {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  
+  /* ========================================
+     LOADING E ERROR STATES
+     ======================================== */
+  .loadingMessage {
+    text-align: center;
+    padding: 2rem;
+    color: var(--texto);
+    font-size: 1.1rem;
+  }
+  
+  .errorMessage {
+    text-align: center;
+    padding: 2rem;
+    color: #e74c3c;
+    font-size: 1.1rem;
+    background: #fee;
+    border: 1px solid #e74c3c;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+  
+  .emptyMessage {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     GRID ALTERNATIVO (se necessário)
+     ======================================== */
+  .cardGrid {
+    display: grid;
+    grid-template-columns: 521px 10px 251px 10px 251px;
+    grid-gap: 24px 10px;
+    justify-content: center;
+    padding: 18px;
+  }
+  
+  .cardGrid .card {
+    box-sizing: border-box;
+    background: var(--card);
+    border-radius: 24px;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  
+  /* ========================================
+     GRID PLACEMENT HELPERS
+     ======================================== */
+  .gridRow2Type2 {
+    grid-column: 1 / 2;
+  }
+  
+  .gridRow2Type3a {
+    grid-column: 3 / 4;
+  }
+  
+  .gridRow2Type3b {
+    grid-column: 5 / 6;
+  }
+  
+  .gridRow3Type3_1 {
+    grid-column: 1 / 2;
+  }
+  
+  .gridRow3Type3_2 {
+    grid-column: 3 / 4;
+  }
+  
+  .gridRow3Type3_3 {
+    grid-column: 5 / 6;
+  }
+  
+  .gridRow4Type2 {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 900px) {
+    .cardLayout {
+      flex-direction: column;
+      gap: 16px;
+      margin: 10px auto 20px;
+      padding: 16px;
+    }
+  
+    .cardLayoutInner {
+      flex-direction: column;
+      gap: 16px;
+    }
+  
+    .column {
+      width: 100%;
+    }
+  
+    .rowSmall {
+      flex-direction: column;
+      gap: 16px;
+    }
+  
+    .cardGrid {
+      grid-template-columns: 1fr;
+      justify-items: stretch;
+      padding: 16px;
+      gap: 16px;
+    }
+  
+    .gridRow2Type2,
+    .gridRow2Type3a,
+    .gridRow2Type3b,
+    .gridRow3Type3_1,
+    .gridRow3Type3_2,
+    .gridRow3Type3_3,
+    .gridRow4Type2 {
+      grid-column: auto;
+    }
+  
+    .loadingMessage,
+    .errorMessage,
+    .emptyMessage {
+      font-size: 1rem;
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .cardLayout {
+      margin: 5px auto 15px;
+      padding: 12px;
+    }
+  
+    .cardLayoutInner {
+      gap: 12px;
+    }
+  
+    .column {
+      gap: 16px;
+    }
+  
+    .rowSmall {
+      gap: 12px;
+    }
+  }

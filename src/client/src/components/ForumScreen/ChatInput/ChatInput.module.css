@@ -1,0 +1,293 @@
+/* ========================================
+   CHAT FORM
+   ======================================== */
+   .salaForumChatForm {
+    background: #0f6eea;
+    padding: 22px 32px;
+    border-radius: 0 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* ========================================
+     CHAT FORM BAR
+     ======================================== */
+  .salaForumChatFormBar {
+    color: #F3F3F3;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .salaForumChatFormLabel {
+    letter-spacing: 0.02em;
+    font-size: 0.75rem;
+  }
+  
+  .salaForumChatBarActions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .salaForumChatBarBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    color: #F3F3F3;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  
+  .salaForumChatBarBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  /* ========================================
+     EMOJI PICKER
+     ======================================== */
+  .emojiPickerContainer {
+    position: relative;
+  }
+  
+  .emojiPickerPopup {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 10px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  /* ========================================
+     PREVIEW DE ANEXOS
+     ======================================== */
+  .salaForumAttachmentsPreview {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    border-radius: 24px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .salaForumAttachmentItem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 120px;
+  }
+  
+  .salaForumAttachmentRemove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    z-index: 1;
+  }
+  
+  .salaForumAttachmentRemove:hover {
+    background: #e74c3c;
+    transform: scale(1.1);
+  }
+  
+  .salaForumAttachmentPreview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #e0e0e0;
+  }
+  
+  .salaForumAttachmentName {
+    font-size: 0.75rem;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* ========================================
+     CHAT INPUT
+     ======================================== */
+  .salaForumChatFormInputs {
+    display: flex;
+    align-items: center;
+    background: #F3F3F3;
+    border-radius: 120px;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+  
+  .salaForumChatInput {
+    flex: 1;
+    color: #7d8185;
+    border: none;
+    border-radius: 16px;
+    padding: 0;
+    font-size: 1rem;
+    outline: none;
+    background: transparent;
+  }
+  
+  .salaForumChatInput::placeholder {
+    color: #7d8185;
+  }
+  
+  /* ========================================
+     SEND BUTTON
+     ======================================== */
+  .salaForumChatSendBtn {
+    width: 40px;
+    height: 40px;
+    background: #0f6eea;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.3);
+    color: #F3F3F3;
+    transition: transform 0.2s ease;
+  }
+  
+  .salaForumChatSendBtn:hover {
+    transform: scale(1.05);
+  }
+  
+  .salaForumChatSendBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .salaForumSendIcon {
+    font-size: 1.2rem;
+  }
+  
+  /* ========================================
+     SCROLLBAR CUSTOMIZADA PARA PREVIEW
+     ======================================== */
+  .salaForumAttachmentsPreview::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .salaForumAttachmentsPreview::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  .salaForumAttachmentsPreview::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+  
+  .salaForumAttachmentsPreview::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* ========================================
+     RESPONSIVIDADE
+     ======================================== */
+  @media (max-width: 768px) {
+    .salaForumChatForm {
+      padding: 18px 24px;
+    }
+  
+    .salaForumChatFormBar {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+  
+    .salaForumChatBarActions {
+      align-self: flex-end;
+    }
+  
+    .emojiPickerPopup {
+      left: auto;
+      right: 0;
+    }
+    
+    .salaForumAttachmentItem {
+      width: 100px;
+    }
+    
+    .salaForumAttachmentPreview {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .salaForumChatFormInputs {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+  
+    .salaForumChatInput {
+      font-size: 0.9rem;
+    }
+  
+    .salaForumChatSendBtn {
+      width: 36px;
+      height: 36px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .salaForumChatForm {
+      padding: 16px 20px;
+    }
+  
+    .salaForumChatFormLabel {
+      font-size: 0.7rem;
+    }
+  
+    .salaForumChatBarBtn {
+      width: 32px;
+      height: 32px;
+      font-size: 0.875rem;
+    }
+  
+    .salaForumAttachmentsPreview {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+  
+    .salaForumAttachmentItem {
+      width: 80px;
+    }
+  
+    .salaForumAttachmentPreview {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .salaForumAttachmentName {
+      font-size: 0.7rem;
+    }
+  }
