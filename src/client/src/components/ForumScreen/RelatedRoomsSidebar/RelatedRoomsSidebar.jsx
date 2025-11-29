@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { forumAPI } from "../../../services/api";
 import JoinConfirmationModal from "../../JoinConfirmationModal/JoinConfirmationModal";
@@ -18,6 +18,50 @@ export default function RelatedRoomsSidebar({
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isJoining, setIsJoining] = useState(false);
 
+  // Helper: decode simples do payload do JWT para obter o userId
+  const getCurrentUserId = () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return null;
+      const [, payloadB64] = token.split(".");
+      if (!payloadB64) return null;
+
+      const base64 = payloadB64.replace(/-/g, "+").replace(/_/g, "/");
+      const json = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const payload = JSON.parse(json);
+      return payload?.id || payload?._id || payload?.userId || payload?.sub || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const currentUserId = useMemo(() => getCurrentUserId(), []);
+
+  // Normaliza uma coleção de forums do usuário para um Set de ids (string)
+  const userForumIdSet = useMemo(() => {
+    const ids = new Set();
+    if (!Array.isArray(userForums)) return ids;
+
+    userForums.forEach((f) => {
+      if (!f) return;
+      let id =
+        (typeof f === "string" && f) ||
+        f._id ||
+        f.id ||
+        f.forumId ||
+        (f.forum && (typeof f.forum === "string" ? f.forum : f.forum._id));
+
+      if (id) ids.add(String(id));
+    });
+
+    return ids;
+  }, [userForums]);
+
   // Função para truncar texto de forma inteligente
   const truncateText = (text, maxLength = 18) => {
     if (!text || typeof text !== 'string') return 'Sem título';
@@ -25,9 +69,36 @@ export default function RelatedRoomsSidebar({
     return text.slice(0, maxLength - 3) + "...";
   };
 
-  // Verificar se o usuário é membro de uma sala
-  const isUserMember = (roomId) => {
-    return userForums.some(forum => forum._id === roomId);
+  // Verificar se o usuário é membro da sala
+  const isUserMember = (roomOrId) => {
+    const roomId =
+      typeof roomOrId === "string"
+        ? roomOrId
+        : roomOrId?._id || roomOrId?.id || roomOrId?.forumId;
+
+    // 1) Checa se o ID do fórum está na lista passada via prop
+    if (roomId && userForumIdSet.has(String(roomId))) return true;
+
+    // 2) Fallback: checa se o usuário atual está listado nos membros/participantes da sala
+    if (currentUserId && roomOrId && typeof roomOrId === "object") {
+      const members = roomOrId.members || roomOrId.participants || [];
+      // members pode ser array de strings (ids) ou objetos de usuário
+      const isInMembers = members.some((m) => {
+        if (!m) return false;
+        if (typeof m === "string") return String(m) === String(currentUserId);
+        if (typeof m === "object") {
+          return (
+            String(m._id) === String(currentUserId) ||
+            String(m.id) === String(currentUserId) ||
+            String(m.userId) === String(currentUserId)
+          );
+        }
+        return false;
+      });
+      if (isInMembers) return true;
+    }
+
+    return false;
   };
 
   // Buscar salas relacionadas
@@ -57,15 +128,16 @@ export default function RelatedRoomsSidebar({
   // Handle click em sala relacionada
   const handleRoomClick = (e, room) => {
     e.preventDefault();
-    
-    if (isUserMember(room._id)) {
-      // Se é membro, redirecionar diretamente
+
+    // Se já é membro, redireciona direto e não abre modal
+    if (isUserMember(room)) {
       window.location.href = `/sala/${room._id}`;
-    } else {
-      // Se não é membro, mostrar modal de confirmação
-      setSelectedRoom(room);
-      setShowConfirmModal(true);
+      return;
     }
+
+    // Caso não seja membro, abre modal de confirmação
+    setSelectedRoom(room);
+    setShowConfirmModal(true);
   };
 
   // Confirmar entrada na sala
@@ -197,7 +269,7 @@ export default function RelatedRoomsSidebar({
 
       {/* Modal de confirmação */}
       <JoinConfirmationModal
-        isOpen={showConfirmModal}
+        isOpen={showConfirmModal && selectedRoom && !isUserMember(selectedRoom)}
         forum={selectedRoom}
         onConfirm={handleJoinConfirm}
         onCancel={handleJoinCancel}

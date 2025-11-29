@@ -30,7 +30,10 @@ app.use(morgan('dev'));
 
 // CORS configurado corretamente
 app.use(cors({
-  origin: 'http://localhost:5173', // URL do frontend
+  origin: [
+    "http://localhost:5173",
+    "https://tech4um-grupo7-1.onrender.com"
+  ],
   credentials: true, // Permite cookies
 }));
 

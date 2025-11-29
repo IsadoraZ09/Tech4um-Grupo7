@@ -20,7 +20,10 @@ const server = app.listen(process.env.PORT || 3000, async () => {
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://tech4um-grupo7-1.onrender.com"
+  ],
     methods: ["GET", "POST"],
     credentials: true
   },
