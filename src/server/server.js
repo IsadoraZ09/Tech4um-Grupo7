@@ -34,9 +34,6 @@ const onlineUsers = new Map();
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  // ===============================
-  // ENTRAR NO FÓRUM
-  // ===============================
   socket.on("join_forum", (data) => {
     const { forumId, userData } = data;
     socket.join(forumId);
@@ -57,9 +54,6 @@ io.on("connection", (socket) => {
     io.to(forumId).emit("users_online_updated", usersInForum);
   });
 
-  // ===============================
-  // SAIR DO FÓRUM
-  // ===============================
   socket.on("leave_forum", (forumId) => {
     socket.leave(forumId);
 
@@ -75,9 +69,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // ===============================
-  // ✏️ COMEÇOU A DIGITAR
-  // ===============================
+ 
   socket.on("start_typing", ({ forumId, userData }) => {
     console.log("✏️ Usuário digitando:", userData);
 
@@ -87,20 +79,15 @@ io.on("connection", (socket) => {
     });
   });
 
-  // ===============================
-  // 🛑 PAROU DE DIGITAR
-  // ===============================
   socket.on("stop_typing", ({ forumId, userData }) => {
     console.log("🛑 Usuário parou de digitar:", userData);
-
-    socket.to(forumId).emit("user_stop_typing", {
+  
+    socket.to(forumId).emit("user_stopped_typing", {
       userId: userData.userId
     });
   });
+  
 
-  // ===============================
-  // ENVIAR MENSAGEM (SEU CÓDIGO ORIGINAL)
-  // ===============================
   socket.on("send_message", async (data) => {
     console.log("📨 Mensagem recebida no servidor:", {
       forumId: data.forumId,
@@ -205,9 +192,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // ===============================
-  // DESCONECTOU
-  // ===============================
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
 
