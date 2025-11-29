@@ -25,9 +25,21 @@ export default function RelatedRoomsSidebar({
     return text.slice(0, maxLength - 3) + "...";
   };
 
-  // Verificar se o usuário é membro de uma sala
+  // Verificar se o usuário é membro de uma sala (versão robusta)
   const isUserMember = (roomId) => {
-    return userForums.some(forum => forum._id === roomId);
+    if (!roomId || !Array.isArray(userForums)) return false;
+    
+    return userForums.some(forum => {
+      // Checar diferentes formatos possíveis
+      if (typeof forum === 'string') return forum === roomId;
+      if (typeof forum === 'object' && forum !== null) {
+        return forum._id === roomId || 
+               forum.id === roomId || 
+               forum.forumId === roomId ||
+               forum.forum?._id === roomId;
+      }
+      return false;
+    });
   };
 
   // Buscar salas relacionadas
@@ -57,6 +69,10 @@ export default function RelatedRoomsSidebar({
   // Handle click em sala relacionada
   const handleRoomClick = (e, room) => {
     e.preventDefault();
+    
+    console.log('Room clicked:', room._id);
+    console.log('User forums:', userForums);
+    console.log('Is member:', isUserMember(room._id));
     
     if (isUserMember(room._id)) {
       // Se é membro, redirecionar diretamente

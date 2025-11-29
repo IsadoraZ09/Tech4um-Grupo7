@@ -23,6 +23,7 @@ export default function Forum() {
   const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [privateMode, setPrivateMode] = useState(null); // { id, username }
+  const [userForums, setUserForums] = useState([]); // Adicionar estado para fóruns do usuário
   const modalRef = useRef(null);
 
   const {
@@ -48,6 +49,7 @@ export default function Forum() {
         return;
       }
       checkForumAccess();
+      fetchUserForums(); // Buscar fóruns do usuário
     }
   }, [user, loading, salaId]);
 
@@ -73,6 +75,26 @@ export default function Forum() {
       alert("Erro ao acessar o fórum.");
     } finally {
       setForumLoading(false);
+    }
+  };
+
+  // Função para buscar fóruns do usuário
+  const fetchUserForums = async () => {
+    try {
+      const response = await forumAPI.getAllForums();
+      const allForums = response.data?.data?.forums || [];
+      
+      // Filtrar apenas os fóruns onde o usuário é membro
+      const userMemberForums = allForums.filter(f => 
+        f.members?.some(m => 
+          (typeof m === 'string' ? m : m._id || m.id) === (user._id || user.id)
+        )
+      );
+      
+      console.log('👤 Fóruns do usuário:', userMemberForums);
+      setUserForums(userMemberForums);
+    } catch (err) {
+      console.error("❌ Erro ao buscar fóruns do usuário:", err);
     }
   };
 
@@ -291,6 +313,7 @@ export default function Forum() {
 
         <aside className={styles.salaForumRight}>
           <RelatedRoomsSidebar 
+            userForums={userForums}
             currentForumId={salaId}
             currentForum={forum}
           />
