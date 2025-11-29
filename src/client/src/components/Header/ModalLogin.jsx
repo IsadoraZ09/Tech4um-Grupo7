@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../features/AuthContext.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import { authAPI } from "../../services/api";
 import styles from "./ModalLogin.module.css"; // Importação do CSS Modules
 import "../../styles/global.css";
@@ -111,7 +111,8 @@ export default function ModalLogin() {
           localStorage.setItem("token", token);
           
           login({
-            id: data.user._id,
+            _id: data.user._id, // Usar _id consistentemente
+            id: data.user._id,  // Manter ambos por compatibilidade
             username: data.user.username,
             email: data.user.email,
             role: data.user.role,
@@ -127,7 +128,8 @@ export default function ModalLogin() {
           localStorage.setItem("token", token);
           
           login({
-            id: data.user._id,
+            _id: data.user._id, // Usar _id consistentemente
+            id: data.user._id,  // Manter ambos por compatibilidade
             username: data.user.username,
             email: data.user.email,
             role: data.user.role,
@@ -150,7 +152,7 @@ export default function ModalLogin() {
       role="dialog"
       aria-label={isSignup ? "Cadastro" : "Login"}
       onMouseDown={(e) => {
-        if (e.target.classList.contains("modal-overlay")) closeLogin();
+        if (e.target === e.currentTarget) closeLogin();
       }}
     >
       <div
@@ -168,80 +170,80 @@ export default function ModalLogin() {
         </p>
 
         {serverError && (
-          <div className="error-msg server-error">{serverError}</div>
+          <div className={styles.serverError}>{serverError}</div>
         )}
 
         <form onSubmit={handleSubmit} noValidate>
           {isSignup && (
             <>
-              <label className="label">Nome de usuário</label>
+              <label className={styles.label}>Nome de usuário</label>
               <input
-                className={`input ${errors.username ? "input-error" : ""}`}
+                className={`${styles.input} ${errors.username ? styles.inputError : ""}`}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Seu nome de usuário"
                 disabled={loading}
               />
               {errors.username && (
-                <div className="error-msg">{errors.username}</div>
+                <div className={styles.errorMsg}>{errors.username}</div>
               )}
             </>
           )}
 
-          <label className="label">E-mail</label>
+          <label className={styles.label}>E-mail</label>
           <input
             type="email"
-            className={`input ${errors.email ? "input-error" : ""}`}
+            className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="seu@email.com"
             disabled={loading}
           />
-          {errors.email && <div className="error-msg">{errors.email}</div>}
+          {errors.email && <div className={styles.errorMsg}>{errors.email}</div>}
 
-          <label className="label">Senha</label>
+          <label className={styles.label}>Senha</label>
           <input
             type="password"
-            className={`input ${errors.password ? "input-error" : ""}`}
+            className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={isSignup ? "Mínimo 8 caracteres" : "Sua senha"}
             disabled={loading}
           />
           {errors.password && (
-            <div className="error-msg">{errors.password}</div>
+            <div className={styles.errorMsg}>{errors.password}</div>
           )}
 
           {isSignup && (
             <>
-              <label className="label">Confirmar senha</label>
+              <label className={styles.label}>Confirmar senha</label>
               <input
                 type="password"
-                className={`input ${errors.passwordConfirm ? "input-error" : ""}`}
+                className={`${styles.input} ${errors.passwordConfirm ? styles.inputError : ""}`}
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 placeholder="Confirme sua senha"
                 disabled={loading}
               />
               {errors.passwordConfirm && (
-                <div className="error-msg">{errors.passwordConfirm}</div>
+                <div className={styles.errorMsg}>{errors.passwordConfirm}</div>
               )}
             </>
           )}
 
-          <div className="modal-actions">
-            <button type="submit" className="btn-primary-login" disabled={loading}>
+          <div className={styles.modalActions}>
+            <button type="submit" className={styles.btnPrimaryLogin} disabled={loading}>
               {loading ? "Carregando..." : (isSignup ? "Cadastrar" : "Entrar")}
             </button>
           </div>
         </form>
 
-        <div className="modal-toggle">
+        <div className={styles.modalToggle}>
           <p>
             {isSignup ? "Já tem uma conta?" : "Não tem uma conta?"}{" "}
             <button
               type="button"
-              className="toggle-btn"
+              className={styles.toggleBtn}
               onClick={toggleMode}
               disabled={loading}
             >

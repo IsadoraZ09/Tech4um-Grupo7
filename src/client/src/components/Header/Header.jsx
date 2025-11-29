@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../features/AuthContext.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import { authAPI } from "../../services/api.js";
 import logo from "../../assets/Vector.png";
 import styles from "./Header.module.css";

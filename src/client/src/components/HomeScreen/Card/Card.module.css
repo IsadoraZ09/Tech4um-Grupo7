@@ -94,13 +94,14 @@
   }
   
   .cardType1 .creator {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    position: static;
+    top: auto;
+    right: auto;
     color: #374151;
     font-size: 12px;
     text-align: left;
     display: block;
+    padding: 10px 16px;
   }
   
   .cardType1 .creator.bottom {
@@ -282,6 +283,42 @@
     padding: 0 8px;
     margin-bottom: 12px;
     margin-right: 12px;
+  }
+
+  /* ========================================
+     CARD FLAGS
+     ======================================== */
+  .cardFlag {
+    position: absolute;
+    bottom: 32px;
+    right: 32px;
+    z-index: 2;
+  }
+
+  .joinFlag {
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .unreadFlag {
+    background: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
   
   /* ========================================

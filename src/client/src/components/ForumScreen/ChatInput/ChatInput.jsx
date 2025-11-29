@@ -1,29 +1,99 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import EmojiPicker from "emoji-picker-react";
 import styles from "./ChatInput.module.css";
 import "../../../styles/global.css"; // Importar global para classes compartilhadas
 
-export default function ChatInput({ onSendMessage }) {
+export default function ChatInput({ 
+  onSendMessage, 
+  disabled = false, 
+  privateMode = null, // { id, username }
+  onCancelPrivateMode, // Adicionar esta prop
+  onStartTyping, // Nova prop
+  onStopTyping, // Nova prop
+}) {
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const fileInputRef = useRef(null);
   const emojiPickerRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (disabled) return;
+
     if ((message.trim() || attachedFiles.length > 0) && onSendMessage) {
       onSendMessage({
         content: message,
         files: attachedFiles,
+        to: privateMode?.id || null, // Enviar ID do destinatário se for privado
       });
       setMessage("");
       setAttachedFiles([]);
+      
+      // Parar de digitar quando enviar mensagem
+      handleStopTyping();
+    }
+  };
+
+  // Handler para cancelar modo privado
+  const handleCancelPrivateMode = () => {
+    if (onCancelPrivateMode) {
+      onCancelPrivateMode();
+    }
+  };
+
+  // Função para iniciar digitação
+  const handleStartTyping = useCallback(() => {
+    if (!isTyping && onStartTyping) {
+      setIsTyping(true);
+      onStartTyping();
+    }
+  }, [isTyping, onStartTyping]);
+
+  // Função para parar digitação
+  const handleStopTyping = useCallback(() => {
+    if (isTyping && onStopTyping) {
+      setIsTyping(false);
+      onStopTyping();
+    }
+    
+    // Limpar timeout existente
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+  }, [isTyping, onStopTyping]);
+
+  // Handler para mudanças no input
+  const handleMessageChange = (e) => {
+    const newMessage = e.target.value;
+    setMessage(newMessage);
+
+    if (newMessage.trim()) {
+      // Se começou a digitar, notificar
+      handleStartTyping();
+
+      // Resetar timeout - parar de digitar após 2 segundos sem atividade
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      
+      typingTimeoutRef.current = setTimeout(() => {
+        handleStopTyping();
+      }, 2000);
+    } else {
+      // Se apagou tudo, parar de digitar imediatamente
+      handleStopTyping();
     }
   };
 
   const onEmojiClick = (emojiObject) => {
     setMessage((prev) => prev + emojiObject.emoji);
+    // Notificar que está digitando quando adiciona emoji
+    handleStartTyping();
   };
 
   const handleFileSelect = (e) => {
@@ -46,6 +116,16 @@ export default function ChatInput({ onSendMessage }) {
     });
   };
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    // Parar de digitar quando o input perde o foco
+    handleStopTyping();
+  };
+
   // Fechar emoji picker ao clicar fora
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -66,19 +146,42 @@ export default function ChatInput({ onSendMessage }) {
     };
   }, [showEmojiPicker]);
 
-  // Limpar URLs ao desmontar
+  // Limpar URLs ao desmontar e parar de digitar
   React.useEffect(() => {
     return () => {
       attachedFiles.forEach((file) => URL.revokeObjectURL(file.preview));
+      handleStopTyping();
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
     };
   }, []);
 
   return (
-    <form className={styles.salaForumChatForm} onSubmit={handleSubmit}>
+    <form 
+      className={`${styles.salaForumChatForm} ${privateMode ? styles.privateMode : ''}`} 
+      onSubmit={handleSubmit}
+    >
       <div className={styles.salaForumChatFormBar}>
         <span className={styles.salaForumChatFormLabel}>
-          Enviando para todos do 4um
+          {privateMode 
+            ? `Enviando mensagem privada para ${privateMode.username}` 
+            : "Enviando para todos do 4um"
+          }
         </span>
+        
+        {privateMode && (
+          <button
+            type="button"
+            className={styles.cancelPrivateMode}
+            onClick={handleCancelPrivateMode}
+            aria-label="Cancelar modo privado"
+            title="Voltar para mensagem pública"
+          >
+            ✕
+          </button>
+        )}
+
         <div className={styles.salaForumChatBarActions}>
           <div className={styles.emojiPickerContainer} ref={emojiPickerRef}>
             <button
@@ -238,16 +341,27 @@ export default function ChatInput({ onSendMessage }) {
       <div className={styles.salaForumChatFormInputs}>
         <input
           className={styles.salaForumChatInput}
-          placeholder="Escreva aqui uma mensagem maneira para mandar para os colegas..."
+          placeholder={
+            disabled
+              ? "Conectando..."
+              : isFocused || message.trim()
+              ? ""
+              : privateMode
+              ? `Mensagem privada para ${privateMode.username}...`
+              : "Escreva aqui uma mensagem maneira para mandar para os colegas..."
+          }
           aria-label="Mensagem"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleMessageChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          disabled={disabled}
         />
         <button
           type="submit"
           className={styles.salaForumChatSendBtn}
           title="Enviar"
-          disabled={!message.trim() && attachedFiles.length === 0}
+          disabled={disabled || (!message.trim() && attachedFiles.length === 0)}
         >
           <svg
             width="24"

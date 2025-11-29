@@ -8,7 +8,8 @@ const app = require('./app');
 const dotenv = require('dotenv');
 const connectionDB = require('./utils/connectDB');
 const { Server } = require('socket.io');
-const Message = require('./models/messageModel'); // ADICIONE ESTA LINHA
+const Message = require('./models/messageModel');
+const mongoose = require("mongoose");
 
 dotenv.config({ path: `${__dirname}/config.env` });
 
@@ -23,68 +24,209 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true
   },
-  connectionStateRecovery: {}, 
+  connectionStateRecovery: {},
+  maxHttpBufferSize: 1e7
 });
+
+// Lista de usuários online
+const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("join_forum", (forumId) => {
+  // ===============================
+  // ENTRAR NO FÓRUM
+  // ===============================
+  socket.on("join_forum", (data) => {
+    const { forumId, userData } = data;
     socket.join(forumId);
-    console.log(`User ${socket.id} joined forum ${forumId}`);
+
+    if (!onlineUsers.has(forumId)) {
+      onlineUsers.set(forumId, new Map());
+    }
+
+    onlineUsers.get(forumId).set(socket.id, {
+      socketId: socket.id,
+      userId: userData.userId,
+      username: userData.username,
+      email: userData.email,
+      joinedAt: new Date()
+    });
+
+    const usersInForum = Array.from(onlineUsers.get(forumId).values());
+    io.to(forumId).emit("users_online_updated", usersInForum);
   });
 
-  socket.on("send_message", async (data) => { // ADICIONE async
-    console.log("📨 Mensagem recebida no servidor:", data);
-    
-    const payload = {
-      sender: data.sender,
-      text: data.text,
-      to: data.to,
-      private: !!data.to
-    };
+  // ===============================
+  // SAIR DO FÓRUM
+  // ===============================
+  socket.on("leave_forum", (forumId) => {
+    socket.leave(forumId);
 
-    // // SALVAR NO BANCO DE DADOS
-    // try {
-    //   const newMessage = await Message.create({
-    //     forumId: data.forumId,
-    //     sender: data.sender,
-    //     to: data.to || null,
-    //     text: data.text,
-    //     private: !!data.to
-    //   });
+    if (onlineUsers.has(forumId)) {
+      onlineUsers.get(forumId).delete(socket.id);
 
-    //   console.log("✅ Mensagem salva no banco:", newMessage._id);
-
-    //   // Adicionar o ID da mensagem ao payload
-    //   payload._id = newMessage._id;
-    //   payload.createdAt = newMessage.createdAt;
-
-    // } catch (error) {
-    //   console.error("❌ Erro ao salvar mensagem:", error);
-    //   socket.emit("message_error", { error: "Falha ao salvar mensagem" });
-    //   return;
-    // }
-
-    // ENVIAR VIA SOCKET.IO
-    if (data.to) {
-      // mensagem privada
-      io.to(data.to).emit("private_message", payload);
-      io.to(socket.id).emit("private_message", payload);
-    } else {
-      // mensagem pública
-      io.to(data.forumId).emit("public_message", payload);
+      if (onlineUsers.get(forumId).size === 0) {
+        onlineUsers.delete(forumId);
+      } else {
+        const usersInForum = Array.from(onlineUsers.get(forumId).values());
+        io.to(forumId).emit("users_online_updated", usersInForum);
+      }
     }
   });
 
+  // ===============================
+  // ✏️ COMEÇOU A DIGITAR
+  // ===============================
+  socket.on("start_typing", ({ forumId, userData }) => {
+    console.log("✏️ Usuário digitando:", userData);
+
+    socket.to(forumId).emit("user_typing", {
+      userId: userData.userId,
+      username: userData.username
+    });
+  });
+
+  // ===============================
+  // 🛑 PAROU DE DIGITAR
+  // ===============================
+  socket.on("stop_typing", ({ forumId, userData }) => {
+    console.log("🛑 Usuário parou de digitar:", userData);
+
+    socket.to(forumId).emit("user_stop_typing", {
+      userId: userData.userId
+    });
+  });
+
+  // ===============================
+  // ENVIAR MENSAGEM (SEU CÓDIGO ORIGINAL)
+  // ===============================
+  socket.on("send_message", async (data) => {
+    console.log("📨 Mensagem recebida no servidor:", {
+      forumId: data.forumId,
+      sender: data.sender,
+      senderType: typeof data.sender,
+      to: data.to,
+      text: data.text || data.content,
+      image: data.image ? `${data.image.size} bytes` : 'Sem imagem'
+    });
+
+    if (!data.text?.trim() && !data.content?.trim() && !data.image) {
+      socket.emit("message_error", { error: "Mensagem deve conter texto ou imagem" });
+      return;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(data.sender)) {
+      console.error("❌ Sender inválido:", data.sender);
+      socket.emit("message_error", { error: "ID do usuário inválido" });
+      return;
+    }
+
+    const messageData = {
+      forumId: new mongoose.Types.ObjectId(data.forumId),
+      sender: new mongoose.Types.ObjectId(data.sender),
+      to: data.to ? new mongoose.Types.ObjectId(data.to) : null,
+      text: data.text || data.content || null,
+      private: !!data.to
+    };
+
+    if (data.image) {
+      if (data.image.size > 5 * 1024 * 1024) {
+        socket.emit("message_error", { error: "Imagem muito grande. Máximo 5MB." });
+        return;
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(data.image.type)) {
+        socket.emit("message_error", { error: "Tipo de arquivo não suportado." });
+        return;
+      }
+
+      messageData.image = {
+        data: Buffer.from(data.image.data),
+        contentType: data.image.type,
+        originalName: data.image.name || "imagem.jpg",
+        size: data.image.size
+      };
+    }
+
+    try {
+      const newMessage = await Message.create(messageData);
+      
+      const populatedMessage = await Message.findById(newMessage._id)
+        .populate('sender', 'username email avatar')
+        .populate('to', 'username email avatar');
+
+      const payload = {
+        _id: populatedMessage._id,
+        sender: populatedMessage.sender,
+        text: populatedMessage.text,
+        content: populatedMessage.text,
+        to: populatedMessage.to,
+        private: populatedMessage.private,
+        isPrivate: populatedMessage.private,
+        messageType: populatedMessage.messageType,
+        timestamp: populatedMessage.createdAt,
+        createdAt: populatedMessage.createdAt
+      };
+
+      if (populatedMessage.image?.data) {
+        const base64Image = populatedMessage.image.data.toString("base64");
+        payload.image = {
+          data: `data:${populatedMessage.image.contentType};base64,${base64Image}`,
+          contentType: populatedMessage.image.contentType,
+          originalName: populatedMessage.image.originalName,
+          size: populatedMessage.image.size
+        };
+      }
+
+      if (data.to) {
+        console.log("📮 Enviando mensagem privada");
+        
+        const senderId = data.sender;
+        const recipientId = data.to;
+        
+        const forumUsers = onlineUsers.get(data.forumId);
+        if (forumUsers) {
+          forumUsers.forEach((userData, socketId) => {
+            if (userData.userId === senderId || userData.userId === recipientId) {
+              io.to(socketId).emit("private_message", payload);
+            }
+          });
+        }
+      } else {
+        console.log("📢 Enviando mensagem pública para fórum:", data.forumId);
+        io.to(data.forumId).emit("public_message", payload);
+      }
+
+    } catch (err) {
+      console.error("❌ Erro ao salvar mensagem:", err);
+      socket.emit("message_error", { error: err.message || "Erro ao salvar mensagem" });
+    }
+  });
+
+  // ===============================
+  // DESCONECTOU
+  // ===============================
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
+
+    for (const [forumId, users] of onlineUsers.entries()) {
+      if (users.has(socket.id)) {
+        users.delete(socket.id);
+
+        if (users.size === 0) {
+          onlineUsers.delete(forumId);
+        } else {
+          const usersInForum = Array.from(users.values());
+          io.to(forumId).emit("users_online_updated", usersInForum);
+        }
+      }
+    }
   });
 });
 
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
+  server.close(() => process.exit(1));
 });

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../features/AuthContext.jsx";
+import { useAuth } from "../../../contexts/AuthContext.jsx";
 import ModalCreateForum from "../ModalForum/ModalForum.jsx";
 import styles from "./SearchBar.module.css";
 import "../../../styles/global.css"; // Importar global para classes compartilhadas

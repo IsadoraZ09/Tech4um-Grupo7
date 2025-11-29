@@ -1,323 +1,391 @@
 /* ========================================
    SIDEBAR TÓPICOS RELACIONADOS
    ======================================== */
-   .salaForumSidebarRight {
-    width: 360px;
-    background: #F3F3F3;
-    border-radius: 30px;
-    padding: 30px 24px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.salaForumSidebarRight {
+  width: 360px;
+  background: #F3F3F3;
+  border-radius: 30px;
+  padding: 30px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Aumentado de 16px para 20px */
+  box-shadow: none;
+  padding-top: 0;
+}
+
+/* ========================================
+   TÍTULO DA SIDEBAR (se necessário)
+   ======================================== */
+.salaForumSidebarTitle {
+  padding-left: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0a5fbf;
+  margin: 0 0 16px 0;
+}
+
+/* ========================================
+   CONTAINER DOS ROOMS
+   ======================================== */
+.salaForumRelatedRoomsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Espaçamento entre os cards */
+}
+
+/* ========================================
+   ROOM CARDS
+   ======================================== */
+.salaForumSideRoom {
+  height: 118px;
+  width: 264px;
+  background: #F3F3F3;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0; /* Remove margin-bottom padrão */
+}
+
+.salaForumSideRoom:hover {
+  background-color: #0a5fbf;
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+}
+
+/* ========================================
+   ROOM ATIVO (SELECIONADO)
+   ======================================== */
+.salaForumSideRoom.active {
+  background-color: #0a5fbf;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 32px rgba(15, 23, 42, 0.16);
+}
+
+.salaForumSideRoom.active .salaForumSideRoomTitle {
+  color: #F3F3F3;
+}
+
+.salaForumSideRoom.active .salaForumSideRoomPessoas {
+  color: #F3F3F3;
+}
+
+.salaForumSideRoom.active:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.2);
+}
+
+/* ========================================
+   ROOM TITLE
+   ======================================== */
+.salaForumSideRoomTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0a5fbf;
+  margin-bottom: 4px;
+  margin-top: 12px;
+  margin-left: 12px;
+  line-height: 1.3;
+  transition: color 0.25s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.salaForumSideRoom:hover .salaForumSideRoomTitle {
+  color: #F3F3F3;
+}
+
+/* ========================================
+   ROOM PARTICIPANTS COUNT
+   ======================================== */
+.salaForumSideRoomPessoas {
+  font-size: 0.9rem;
+  color: #7c8ba1;
+  margin-left: 12px;
+  padding-top: 4px;
+  transition: color 0.25s ease;
+  font-weight: 500;
+}
+
+.salaForumSideRoom:hover .salaForumSideRoomPessoas {
+  color: #F3F3F3;
+}
+
+/* ========================================
+   LABEL PARA FÓRUM ATUAL
+   ======================================== */
+.salaForumCurrentLabel {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #4CAF50;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.salaForumSideRoom.active .salaForumCurrentLabel {
+  background: #2E7D32;
+}
+
+/* ========================================
+   ESTADO VAZIO
+   ======================================== */
+.salaForumEmptyRelated {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.salaForumEmptyRelated::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 auto 0.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23999' viewBox='0 0 24 24'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.salaForumEmptyRelated p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+.salaForumLoadingRelated {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+}
+
+.salaForumLoadingRelated .spinner {
+  margin-right: 0.75rem;
+  border-color: var(--azul-escuro);
+  border-top-color: transparent;
+}
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+@media (max-width: 1200px) {
+  .salaForumSidebarRight {
+    padding-top: 0px;
+    background-color: #f6f6f6;
+    border-radius: 0 0 24px 24px;
+    width: 100%;
+    max-width: none;
     box-shadow: none;
-    padding-top: 0;
+    gap: 16px;
   }
-  
-  /* ========================================
-     TÍTULO DA SIDEBAR (se necessário)
-     ======================================== */
-  .salaForumSidebarTitle {
-    padding-left: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0a5fbf;
-    margin: 0 0 16px 0;
-  }
-  
-  /* ========================================
-     ROOM CARDS
-     ======================================== */
-  .salaForumSideRoom {
-    height: 118px;
-    width: 264px;
-    background: #F3F3F3;
-    border-radius: 24px;
-    padding: 18px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .salaForumSideRoom:hover {
-    background-color: #0a5fbf;
-    transform: translateY(-4px);
-    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
-  }
-  
-  /* ========================================
-     ROOM TITLE
-     ======================================== */
-  .salaForumSideRoomTitle {
-    font-size: 18px;
-    font-weight: 700;
-    color: #0a5fbf;
-    margin-bottom: 4px;
-    margin-top: 12px;
-    margin-left: 12px;
-    line-height: 1.3;
-    transition: color 0.25s ease;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .salaForumSideRoom:hover .salaForumSideRoomTitle {
-    color: #F3F3F3;
-  }
-  
-  /* ========================================
-     ROOM PARTICIPANTS COUNT
-     ======================================== */
-  .salaForumSideRoomPessoas {
-    font-size: 0.9rem;
-    color: #7c8ba1;
-    margin-left: 12px;
-    padding-top: 4px;
-    transition: color 0.25s ease;
-    font-weight: 500;
-  }
-  
-  .salaForumSideRoom:hover .salaForumSideRoomPessoas {
-    color: #F3F3F3;
-  }
-  
-  /* ========================================
-     ESTADO VAZIO
-     ======================================== */
-  .salaForumEmptyRelated {
-    text-align: center;
-    padding: 2rem 1rem;
-    color: var(--muted);
-    font-style: italic;
-  }
-  
-  .salaForumEmptyRelated::before {
-    content: "";
-    display: block;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin: 0 auto 0.75rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23999' viewBox='0 0 24 24'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-  }
-  
-  .salaForumEmptyRelated p {
-    margin: 0;
-    font-size: 0.95rem;
-  }
-  
-  /* ========================================
-     LOADING STATE
-     ======================================== */
-  .salaForumLoadingRelated {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
-    color: var(--muted);
-  }
-  
-  .salaForumLoadingRelated .spinner {
-    margin-right: 0.75rem;
-    border-color: var(--azul-escuro);
-    border-top-color: transparent;
-  }
-  
-  /* ========================================
-     RESPONSIVIDADE
-     ======================================== */
-  @media (max-width: 1200px) {
-    .salaForumSidebarRight {
-      padding-top: 0px;
-      background-color: #f6f6f6;
-      border-radius: 0 0 24px 24px;
-      width: 100%;
-      max-width: none;
-      box-shadow: none;
-    }
-  
-    .salaForumSideRoom {
-      width: 100%;
-      height: auto;
-      min-height: 118px;
-      margin-bottom: 8px;
-    }
-  
-    .salaForumSideRoomTitle {
-      margin-left: 8px;
-      margin-top: 8px;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: unset;
-      line-height: 1.4;
-    }
-  
-    .salaForumSideRoomPessoas {
-      margin-left: 8px;
-      padding-top: 6px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .salaForumSidebarRight {
-      padding: 20px 16px;
-      gap: 12px;
-    }
-  
-    .salaForumSidebarTitle {
-      font-size: 1rem;
-      padding-left: 8px;
-      margin-bottom: 12px;
-    }
-  
-    .salaForumSideRoom {
-      padding: 16px;
-      border-radius: 20px;
-    }
-  
-    .salaForumSideRoomTitle {
-      font-size: 16px;
-      margin-left: 4px;
-      margin-top: 4px;
-    }
-  
-    .salaForumSideRoomPessoas {
-      font-size: 0.8125rem;
-      margin-left: 4px;
-      padding-top: 2px;
-    }
-  
-    .salaForumEmptyRelated,
-    .salaForumLoadingRelated {
-      padding: 1.5rem 1rem;
-    }
-  
-    .salaForumEmptyRelated::before {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .salaForumSidebarRight {
-      padding: 16px 12px;
-    }
-  
-    .salaForumSideRoom {
-      padding: 14px;
-      border-radius: 16px;
-    }
-  
-    .salaForumSideRoomTitle {
-      font-size: 15px;
-    }
-  
-    .salaForumSideRoomPessoas {
-      font-size: 0.75rem;
-    }
-  
-    .salaForumEmptyRelated p {
-      font-size: 0.875rem;
-    }
-  }
-  
-  /* ========================================
-     ACESSIBILIDADE
-     ======================================== */
-  @media (prefers-reduced-motion: reduce) {
-    .salaForumSideRoom {
-      transition: none;
-    }
-  
-    .salaForumSideRoomTitle,
-    .salaForumSideRoomPessoas {
-      transition: none;
-    }
-  }
-  
-  /* Focus states para acessibilidade */
-  .salaForumSideRoom:focus {
-    outline: 2px solid var(--azul-escuro);
-    outline-offset: 2px;
-  }
-  
-  .salaForumSideRoom:focus-visible {
-    outline: 2px solid var(--azul-escuro);
-    outline-offset: 2px;
-  }
-  
-  /* ========================================
-     HOVER EFFECTS ADICIONAIS
-     ======================================== */
-  .salaForumSideRoom::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(10, 95, 191, 0.05), rgba(10, 95, 191, 0.1));
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    border-radius: 24px;
-  }
-  
-  .salaForumSideRoom:hover::before {
-    opacity: 0;
-  }
-  
-  /* ========================================
-     BADGE DE NOVA SALA (se necessário)
-     ======================================== */
-  .salaForumNewBadge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--laranja);
-    color: #F3F3F3;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    padding: 4px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .salaForumSideRoom:hover .salaForumNewBadge {
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--laranja);
-  }
-  
-  /* ========================================
-     SCROLL CONTAINER PARA MUITAS SALAS
-     ======================================== */
+
   .salaForumRelatedRoomsContainer {
-    max-height: 600px;
-    overflow-y: auto;
-    padding-right: 8px;
-    margin-right: -8px;
+    gap: 12px;
   }
-  
-  .salaForumRelatedRoomsContainer::-webkit-scrollbar {
-    width: 6px;
+
+  .salaForumSideRoom {
+    width: 100%;
+    height: auto;
+    min-height: 118px;
+    margin-bottom: 0;
   }
-  
-  .salaForumRelatedRoomsContainer::-webkit-scrollbar-track {
-    background: transparent;
+
+  .salaForumSideRoomTitle {
+    margin-left: 8px;
+    margin-top: 8px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.4;
   }
-  
-  .salaForumRelatedRoomsContainer::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
+
+  .salaForumSideRoomPessoas {
+    margin-left: 8px;
+    padding-top: 6px;
   }
-  
-  .salaForumRelatedRoomsContainer::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .salaForumSidebarRight {
+    padding: 20px 16px;
+    gap: 12px;
   }
+
+  .salaForumRelatedRoomsContainer {
+    gap: 10px;
+  }
+
+  .salaForumSidebarTitle {
+    font-size: 1rem;
+    padding-left: 8px;
+    margin-bottom: 12px;
+  }
+
+  .salaForumSideRoom {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .salaForumSideRoomTitle {
+    font-size: 16px;
+    margin-left: 4px;
+    margin-top: 4px;
+  }
+
+  .salaForumSideRoomPessoas {
+    font-size: 0.8125rem;
+    margin-left: 4px;
+    padding-top: 2px;
+  }
+
+  .salaForumEmptyRelated,
+  .salaForumLoadingRelated {
+    padding: 1.5rem 1rem;
+  }
+
+  .salaForumEmptyRelated::before {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .salaForumSidebarRight {
+    padding: 16px 12px;
+    gap: 10px;
+  }
+
+  .salaForumRelatedRoomsContainer {
+    gap: 8px;
+  }
+
+  .salaForumSideRoom {
+    padding: 14px;
+    border-radius: 18px;
+    min-height: 100px;
+  }
+
+  .salaForumSideRoomTitle {
+    font-size: 15px;
+  }
+
+  .salaForumSideRoomPessoas {
+    font-size: 0.75rem;
+  }
+
+  .salaForumEmptyRelated p {
+    font-size: 0.875rem;
+  }
+}
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .salaForumSideRoom {
+    transition: none;
+  }
+
+  .salaForumSideRoomTitle,
+  .salaForumSideRoomPessoas {
+    transition: none;
+  }
+}
+
+/* Focus states para acessibilidade */
+.salaForumSideRoom:focus {
+  outline: 2px solid var(--azul-escuro);
+  outline-offset: 2px;
+}
+
+.salaForumSideRoom:focus-visible {
+  outline: 2px solid var(--azul-escuro);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   HOVER EFFECTS ADICIONAIS
+   ======================================== */
+.salaForumSideRoom::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(10, 95, 191, 0.05), rgba(10, 95, 191, 0.1));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border-radius: 24px;
+}
+
+.salaForumSideRoom:hover::before {
+  opacity: 0;
+}
+
+/* ========================================
+   BADGE DE NOVA SALA (se necessário)
+   ======================================== */
+.salaForumNewBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--laranja);
+  color: #F3F3F3;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.salaForumSideRoom:hover .salaForumNewBadge {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--laranja);
+}
+
+/* ========================================
+   SCROLL CONTAINER PARA MUITAS SALAS
+   ======================================== */
+.salaForumRelatedRoomsContainer {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-right: -8px;
+}
+
+.salaForumRelatedRoomsContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.salaForumRelatedRoomsContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.salaForumRelatedRoomsContainer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.salaForumRelatedRoomsContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

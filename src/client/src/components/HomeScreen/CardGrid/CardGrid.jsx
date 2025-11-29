@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card/Card.jsx";
 import { forumAPI } from "../../../services/api";
+import { useAuth } from "../../../contexts/AuthContext.jsx";
 import styles from "./CardGrid.module.css";
 
 export default function CardGrid({ searchQuery }) {
   const [forums, setForums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user, openLogin, loading: authLoading } = useAuth(); // Adicionar authLoading
 
   useEffect(() => {
     fetchForums();
@@ -26,7 +28,57 @@ export default function CardGrid({ searchQuery }) {
     }
   };
 
-  if (loading) {
+  const handleForumClick = async (forum) => {
+    console.log('handleForumClick - forum recebido:', forum); // Debug
+
+    // Verificar se o usuário está logado
+    if (!user) {
+      openLogin();
+      return;
+    }
+
+    // Verificar se o forum existe e tem ID
+    if (!forum?._id) {
+      console.error('Forum inválido:', forum);
+      alert('Erro: fórum inválido. Tente novamente.');
+      return;
+    }
+
+    // Esta função só é chamada quando o usuário NÃO é membro
+    // Então sempre tentamos juntar o usuário ao fórum
+    try {
+      console.log('Tentando entrar no fórum:', forum._id); // Debug
+      await forumAPI.joinForum(forum._id);
+      console.log('Entrou no fórum com sucesso, redirecionando...'); // Debug
+      // Após entrar com sucesso, redirecionar para o fórum
+      window.location.href = `/sala/${forum._id}`;
+    } catch (error) {
+      console.error('Erro ao entrar no fórum:', error);
+      alert(error.response?.data?.message || 'Erro ao entrar no fórum');
+    }
+  };
+
+  // Função para verificar se o usuário é membro do fórum
+  const isUserMemberOfForum = (forum) => {
+    // Se o usuário ainda está carregando ou não existe, retornar false
+    if (authLoading || !user) {
+      return false;
+    }
+
+    // Se o fórum não tem membros, retornar false
+    if (!forum?.members) {
+      return false;
+    }
+
+    const members = Array.isArray(forum.members) ? forum.members : [];
+    return members.some(member => {
+      const memberId = typeof member === 'object' && member !== null ? member._id : member;
+      return String(memberId) === String(user.id);
+    });
+  };
+
+  // Se ainda está carregando a autenticação ou os fóruns, mostrar loading
+  if (authLoading || loading) {
     return (
       <section className={styles.cardLayout} aria-label="Container da grade de cards">
         <div className={styles.cardLayoutInner}>
@@ -69,42 +121,35 @@ export default function CardGrid({ searchQuery }) {
   const leftForums = [];
   const rightForums = [];
 
-  let leftSlots = 0; // Contador de "slots" na esquerda (Type1=1, Type2=1, Type3=0.5)
+  let leftSlots = 0;
   let rightSlots = 0;
 
   sortedForums.forEach((forum, index) => {
-    // Determinar qual coluna tem menos slots preenchidos
     if (leftSlots <= rightSlots) {
       leftForums.push(forum);
-      // Calcular slots baseado no padrão da esquerda
       const posInPattern = leftForums.length % 4;
-      if (posInPattern === 1) leftSlots += 1; // Type1
-      else if (posInPattern === 2) leftSlots += 1; // Type2
-      else leftSlots += 0.5; // Type3
+      if (posInPattern === 1) leftSlots += 1;
+      else if (posInPattern === 2) leftSlots += 1;
+      else leftSlots += 0.5;
     } else {
       rightForums.push(forum);
-      // Calcular slots baseado no padrão da direita
       const posInPattern = rightForums.length % 4;
-      if (posInPattern === 1) rightSlots += 1; // Type2
-      else if (posInPattern === 0) rightSlots += 1; // Type1
-      else rightSlots += 0.5; // Type3
+      if (posInPattern === 1) rightSlots += 1;
+      else if (posInPattern === 0) rightSlots += 1;
+      else rightSlots += 0.5;
     }
   });
 
   // Função para verificar se tem Type3 ímpar na última posição e redistribuir
   const redistributeOrphanType3 = () => {
-    // Verificar coluna esquerda
     const leftLastPattern = leftForums.length % 4;
     if (leftLastPattern === 3 && leftForums.length > 0) {
-      // Tem um Type3 sozinho no final da esquerda
       const orphan = leftForums.pop();
       rightForums.push(orphan);
     }
 
-    // Verificar coluna direita
     const rightLastPattern = rightForums.length % 4;
     if (rightLastPattern === 2 && rightForums.length > 0) {
-      // Tem um Type3 sozinho no final da direita
       const orphan = rightForums.pop();
       leftForums.push(orphan);
     }
@@ -112,7 +157,7 @@ export default function CardGrid({ searchQuery }) {
 
   redistributeOrphanType3();
 
-  // Renderizar coluna esquerda: Type1 → Type2 → 2xType3 (repetindo)
+  // Renderizar coluna esquerda
   const renderLeftColumn = () => {
     const elements = [];
     let i = 0;
@@ -121,32 +166,60 @@ export default function CardGrid({ searchQuery }) {
       const positionInPattern = i % 4;
 
       if (positionInPattern === 0) {
-        // Type1
+        const currentForum = leftForums[i];
         elements.push(
-          <Card key={leftForums[i]._id} forum={leftForums[i]} type={1} />
+          <Card 
+            key={currentForum._id} 
+            forum={currentForum} 
+            type={1}
+            isMember={isUserMemberOfForum(currentForum)}
+            onClick={() => handleForumClick(currentForum)}
+          />
         );
         i++;
       } else if (positionInPattern === 1) {
-        // Type2
+        const currentForum = leftForums[i];
         elements.push(
-          <Card key={leftForums[i]._id} forum={leftForums[i]} type={2} />
+          <Card 
+            key={currentForum._id} 
+            forum={currentForum} 
+            type={2}
+            isMember={isUserMemberOfForum(currentForum)}
+            onClick={() => handleForumClick(currentForum)}
+          />
         );
         i++;
       } else if (positionInPattern === 2) {
-        // 2xType3
         if (i + 1 < leftForums.length) {
+          const forum1 = leftForums[i];
+          const forum2 = leftForums[i + 1];
           elements.push(
             <div key={`row-left-${i}`} className={styles.rowSmall}>
-              <Card forum={leftForums[i]} type={3} />
-              <Card forum={leftForums[i + 1]} type={3} />
+              <Card 
+                forum={forum1} 
+                type={3}
+                isMember={isUserMemberOfForum(forum1)}
+                onClick={() => handleForumClick(forum1)}
+              />
+              <Card 
+                forum={forum2} 
+                type={3}
+                isMember={isUserMemberOfForum(forum2)}
+                onClick={() => handleForumClick(forum2)}
+              />
             </div>
           );
           i += 2;
         } else {
-          // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
+          const currentForum = leftForums[i];
           elements.push(
             <div key={`row-left-${i}`} className={styles.rowSmall}>
-              <Card forum={leftForums[i]} type={3} />
+              <Card 
+                forum={currentForum} 
+                type={3}
+                isMember={isUserMemberOfForum(currentForum)}
+                onClick={() => handleForumClick(currentForum)}
+              />
             </div>
           );
           i++;
@@ -157,7 +230,7 @@ export default function CardGrid({ searchQuery }) {
     return elements;
   };
 
-  // Renderizar coluna direita: Type2 → 2xType3 → Type1 (repetindo)
+  // Renderizar coluna direita
   const renderRightColumn = () => {
     const elements = [];
     let i = 0;
@@ -166,34 +239,62 @@ export default function CardGrid({ searchQuery }) {
       const positionInPattern = i % 4;
 
       if (positionInPattern === 0) {
-        // Type2
+        const currentForum = rightForums[i];
         elements.push(
-          <Card key={rightForums[i]._id} forum={rightForums[i]} type={2} />
+          <Card 
+            key={currentForum._id} 
+            forum={currentForum} 
+            type={2}
+            isMember={isUserMemberOfForum(currentForum)}
+            onClick={() => handleForumClick(currentForum)}
+          />
         );
         i++;
       } else if (positionInPattern === 1) {
-        // 2xType3
         if (i + 1 < rightForums.length) {
+          const forum1 = rightForums[i];
+          const forum2 = rightForums[i + 1];
           elements.push(
             <div key={`row-right-${i}`} className={styles.rowSmall}>
-              <Card forum={rightForums[i]} type={3} />
-              <Card forum={rightForums[i + 1]} type={3} />
+              <Card 
+                forum={forum1} 
+                type={3}
+                isMember={isUserMemberOfForum(forum1)}
+                onClick={() => handleForumClick(forum1)}
+              />
+              <Card 
+                forum={forum2} 
+                type={3}
+                isMember={isUserMemberOfForum(forum2)}
+                onClick={() => handleForumClick(forum2)}
+              />
             </div>
           );
           i += 2;
         } else {
-          // Se só tem um (não deveria acontecer após redistribuição, mas por segurança)
+          const currentForum = rightForums[i];
           elements.push(
             <div key={`row-right-${i}`} className={styles.rowSmall}>
-              <Card forum={rightForums[i]} type={3} />
+              <Card 
+                forum={currentForum} 
+                type={3}
+                isMember={isUserMemberOfForum(currentForum)}
+                onClick={() => handleForumClick(currentForum)}
+              />
             </div>
           );
           i++;
         }
       } else if (positionInPattern === 3) {
-        // Type1
+        const currentForum = rightForums[i];
         elements.push(
-          <Card key={rightForums[i]._id} forum={rightForums[i]} type={1} />
+          <Card 
+            key={currentForum._id} 
+            forum={currentForum} 
+            type={1}
+            isMember={isUserMemberOfForum(currentForum)}
+            onClick={() => handleForumClick(currentForum)}
+          />
         );
         i++;
       }
@@ -205,12 +306,9 @@ export default function CardGrid({ searchQuery }) {
   return (
     <section className={styles.cardLayout} aria-label="Container da grade de cards">
       <div className={styles.cardLayoutInner}>
-        {/* Left column */}
         <div className={`${styles.column} ${styles.leftColumn}`}>
           {renderLeftColumn()}
         </div>
-
-        {/* Right column */}
         <div className={`${styles.column} ${styles.rightColumn}`}>
           {renderRightColumn()}
         </div>

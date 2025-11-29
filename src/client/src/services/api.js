@@ -35,4 +35,9 @@ export const forumAPI = {
   joinForum: (id) => api.patch(`/forums/${id}/join`),
 };
 
+export const messageAPI = {
+  getMessages: (forumId) => api.get(`/messages/${forumId}`),
+  deleteMessage: (messageId) => api.delete(`/messages/${messageId}`),
+};
+
 export default api;

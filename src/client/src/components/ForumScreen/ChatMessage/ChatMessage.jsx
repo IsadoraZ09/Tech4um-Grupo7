@@ -28,23 +28,30 @@ export default function ChatMessage({ message }) {
   return (
     <div
       className={`${styles.salaForumMessage} ${
-        message.isPrivate ? styles.salaForumMessagePrivate : ""
+        (message.isPrivate || message.private) ? styles.salaForumMessagePrivate : ""
       }`}
     >
       <div className={styles.salaForumMessageBody}>
         <span className={styles.salaForumMessageAuthor}>
-          {message.sender?.username || "Usuário"}
-        </span>
-        <span className={styles.salaForumMessageText}>
-          {message.isPrivate ? (
-            <b className={styles.salaForumPrivateLabel}>{message.content}</b>
-          ) : (
-            message.content
+          {message.sender?.username || message.sender?.email || "Usuário"}
+          {(message.isPrivate || message.private) && (
+            <span className={styles.salaForumPrivateIndicator} title="Mensagem privada">
+              🔒
+            </span>
           )}
         </span>
-        {message.timestamp && (
+        <span className={styles.salaForumMessageText}>
+          {(message.isPrivate || message.private) ? (
+            <span className={styles.salaForumPrivateMessage}>
+              {message.text || message.content}
+            </span>
+          ) : (
+            message.text || message.content
+          )}
+        </span>
+        {(message.timestamp || message.createdAt) && (
           <span className={styles.salaForumMessageTime}>
-            {new Date(message.timestamp).toLocaleTimeString([], {
+            {new Date(message.timestamp || message.createdAt).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit'
             })}
@@ -96,15 +103,15 @@ export default function ChatMessage({ message }) {
             : undefined,
           border: `2px solid #fff`,
         }}
-        data-color={getAvatarColor(message.sender?.username)}
+        data-color={getAvatarColor(message.sender?.username || message.sender?.email)}
       >
         {message.sender?.avatar ? (
           <img 
             src={message.sender.avatar} 
-            alt={message.sender.username || "Avatar"}
+            alt={message.sender.username || message.sender.email || "Avatar"}
           />
         ) : (
-          getInitials(message.sender?.username)
+          getInitials(message.sender?.username || message.sender?.email)
         )}
       </span>
     </div>

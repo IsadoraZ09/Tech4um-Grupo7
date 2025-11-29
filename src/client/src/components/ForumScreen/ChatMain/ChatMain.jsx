@@ -1,12 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
 import ChatMessage from "../ChatMessage/ChatMessage";
 import ChatInput from "../ChatInput/ChatInput";
+import TypingIndicator from "../TypingIndicator/TypingIndicator";
 import styles from "./ChatMain.module.css";
 import "../../../styles/global.css"; // Importar global para classes compartilhadas
 
-export default function ChatMain({ sala, onSendMessage, loading = false, error = null }) {
+export default function ChatMain({ 
+  sala, 
+  onSendMessage, 
+  loading = false, 
+  error = null, 
+  isConnected = false,
+  privateMode = null,
+  onCancelPrivateMode,
+  typingUsers,
+  currentUserId,
+  onStartTyping,
+  onStopTyping
+}) {
   const messagesEndRef = useRef(null);
-  const [isConnected, setIsConnected] = useState(true);
+  const messagesContainerRef = useRef(null);
 
   // Auto scroll para última mensagem
   useEffect(() => {
@@ -51,17 +64,29 @@ export default function ChatMain({ sala, onSendMessage, loading = false, error =
       aria-busy={loading}
     >
       <header className={styles.salaForumChatHeader}>
-        <h2 className={styles.salaForumChatTitle} title={sala?.name}>
-          {sala?.name || "Carregando..."}
+        <h2 className={styles.salaForumChatTitle} title={sala?.title}>
+          {sala?.title || "Carregando..."}
         </h2>
-        {sala?.creator && (
-          <span className={styles.salaForumChatCriador}>
-            Criado por: <b>{sala.creator.username}</b>
+        <div className={styles.salaForumChatStatus}>
+          {sala?.creator && (
+            <span className={styles.salaForumChatCriador}>
+              Criado por: <b>{sala.creator.username}</b>
+            </span>
+          )}
+          <span 
+            className={`${styles.salaForumConnectionStatus} ${isConnected ? styles.connected : styles.disconnected}`}
+            title={isConnected ? "Conectado" : "Desconectado"}
+          >
           </span>
-        )}
+        </div>
       </header>
       
-      <div className={styles.salaForumChatMessages} role="log" aria-live="polite">
+      <div 
+        className={styles.salaForumChatMessages} 
+        role="log" 
+        aria-live="polite"
+        ref={messagesContainerRef}
+      >
         {!sala?.messages || sala.messages.length === 0 ? (
           <div className={styles.salaForumEmptyState} role="status">
             <p>Nada por aqui, que tal começar o papo?</p>
@@ -80,10 +105,20 @@ export default function ChatMain({ sala, onSendMessage, loading = false, error =
       </div>
       
       <div className={styles.salaForumChatTyping} aria-live="polite">
-        {/* Aqui pode ser adicionado indicador de digitação */}
+        <TypingIndicator 
+          typingUsers={typingUsers} 
+          currentUserId={currentUserId} 
+        />
       </div>
       
-      <ChatInput onSendMessage={onSendMessage} />
+      <ChatInput 
+        onSendMessage={onSendMessage} 
+        disabled={!isConnected}
+        privateMode={privateMode}
+        onCancelPrivateMode={onCancelPrivateMode}
+        onStartTyping={onStartTyping}
+        onStopTyping={onStopTyping}
+      />
     </main>
   );
 }

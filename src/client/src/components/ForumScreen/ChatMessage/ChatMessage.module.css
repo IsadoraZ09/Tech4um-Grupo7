@@ -21,12 +21,26 @@
      PRIVATE MESSAGE VARIANT
      ======================================== */
   .salaForumMessagePrivate {
-    background: #fff5f5;
-    border-left: 4px solid #e74c3c;
+    background: linear-gradient(135deg, #fff3e0, #ffebcc);
+    border-left: 4px solid #ff9500;
+    position: relative;
   }
   
   .salaForumMessagePrivate:hover {
     background: #fef2f2;
+  }
+  
+  .salaForumMessagePrivate::before {
+    content: "Privada";
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    background: #ff9500;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
   }
   
   /* ========================================
@@ -73,6 +87,16 @@
     color: #d84315;
     font-weight: 600;
     font-style: italic;
+  }
+  
+  .salaForumPrivateIndicator {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .salaForumPrivateMessage {
+    color: #e65100;
+    font-weight: 500;
   }
   
   .salaForumMessagePrivate .salaForumMessageAuthor {
