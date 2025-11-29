@@ -55,7 +55,7 @@ app.use('/api/v1/users', userRoutes);
 
 //Routing react-route-dom
 app.all('/*', (req, res, next) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
+  res.sendFile(path.join(process.cwd(),'client','dist','index.html'));
 });
 
 app.all('/api/v1/*', (req, res, next) => {
